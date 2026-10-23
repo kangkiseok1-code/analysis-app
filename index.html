@@ -599,7 +599,7 @@ let profile = null;   // 내 profiles 행
 let coreRow = null;   // 자림에 저장된 내 정보(공용 출생정보, core_profiles 행) — 없거나 읽기 실패면 null
 let tab = 'me';       // 'me'(내 분석)|'profile'|'settings'|'survey'|'pref'|'ipcsurvey'
 const APP_NAME = '분석 : 나를 아는 시간';
-const MATING='https://kangkiseok1-code.github.io/mating-app/';   // 지인 평가 페이지(#peer)와 인연 기능은 만남 앱에 있다
+const MATING='https://kangkiseok1-code.github.io/mating-app/';   // 인연·궁합 기능은 만남 앱에 있다
 let _surveyOnboard=false;   // 온보딩 중 성향검사면 완료 후 허브로
 
 // 공통 온보딩 단계: 사주(생년월일) → 성향(Big Five). 남은 단계 id 반환, 없으면 null
@@ -1695,8 +1695,10 @@ function takeGoParam(){
 async function boot(){
   if(!CONFIGURED){ renderSetup(); return; }
   const goTo=takeGoParam();
-  // 예전에 퍼진 지인 평가 링크가 이 주소로 오면 만남 앱의 평가 페이지로 넘긴다
-  if(location.hash.split('?')[0]==='#peer'){ location.replace(MATING+location.hash); return; }
+  // 초대 링크(?ref=초대자ID) 기억 — 가입/로그인 후 지인 연결로 바꿈. 로그인 왕복에도 살아남게 localStorage에.
+  try{ const r=new URLSearchParams(location.search).get('ref'); if(r) localStorage.setItem('mating_ref', r); }catch(e){}
+  // 공개 지인 평가 페이지 — 로그인 게이트 이전에 처리(로그인 없이 응답)
+  if(location.hash.split('?')[0]==='#peer'){ renderPeer(parseHashParams(location.hash)); return; }
   try{
     const session = await getSessionSafe();
     if(!session){ goHub(); return; }   // 로그인은 자림 허브에서만 — 로그인 뒤 이 주소로 돌아온다
@@ -1720,6 +1722,113 @@ async function redeemInvite(){
   if(ref){ try{ localStorage.removeItem('mating_ref'); }catch(e){} }
 }
 
+/* ==================== 공개 지인 평가(#peer?u=&n=) — 로그인 불필요 ==================== */
+// 지인 평가 링크는 이 앱 하나로 모은다(만남의 옛 #peer 주소는 여기로 넘어온다). 응답은 peer_reviews 표에 쌓이고 '지인이 본 나'에서 본다.
+function renderPeer(params){
+  document.body.classList.remove('jn-on');
+  const subjectId=params.u||'', nick=params.n||'';
+  const subj = nick ? esc(nick)+'님' : '이 사람';
+  const subjSubject = nick ? esc(nick)+'님은' : '이 사람은';
+  if(!subjectId){ app.innerHTML=`<div style="max-width:560px;margin:0 auto"><h1>지인 평가</h1><div class="card"><p class="sub">잘못된 링크예요. 평가를 요청한 분께 링크를 다시 받아주세요.</p></div></div>`; return; }
+  const qhtmlFor = n => PROFILE_Q.slice(0,n).map((it,i)=>{
+    const q3 = it.q.replace(/^나는/, subjSubject);
+    return `<div class="q"><div class="qtext">${i+1}. ${q3}</div>
+      <div class="likert">${LIKERT.map((lab,v)=>`<label><input type="radio" name="pb-${i}" value="${v+1}"><span>${lab.replace('\n','<br>')}</span></label>`).join('')}</div></div>`;
+  }).join('');
+  const hasIpc = !!ipcApi();   // 엔진이 없으면 대인관계 단계 없이 2단계로
+  const names = hasIpc ? ['관계 · 이름','어떤 사람인가요','대인관계'] : ['관계 · 이름','어떤 사람인가요'];
+  app.innerHTML=`
+    <div style="max-width:600px;margin:0 auto">
+    <h1>지인 평가 <span class="seal">緣</span></h1>
+    <p class="sub"><b>${subj}</b>이 평소 어떤 사람인지, 아는 대로 답해주세요. 결과는 본인의 자기 이해에 쓰여요.</p>
+    <div class="steps" style="grid-template-columns:repeat(${names.length},minmax(0,1fr))">${names.map((t,i)=>`<div class="st">${t}</div>`).join('')}</div>
+    <div class="card" data-pstep="0">
+      <h2><span class="seal">①</span> ${subj}과 나의 관계</h2>
+      <label>관계</label>
+      <select id="peer-rel"><option>친구</option><option>가족</option><option>배우자·연인</option><option>직장 동료</option><option>선후배</option><option>기타</option></select>
+      <label style="margin-top:10px">내 이름 <span class="sub" style="font-weight:400">(선택 · 익명 가능)</span></label>
+      <input type="text" id="peer-name" placeholder="예: 김철수">
+      <label style="margin-top:10px">답변 방식 <span class="opt">(고르면 문항 수가 달라져요)</span></label>
+      <div class="seg" id="peer-len"><button type="button" class="on" data-n="20">간단 20문항<small>약 2분</small></button><button type="button" data-n="50">정밀 50문항<small>약 5분</small></button></div>
+      <p class="sub" style="font-size:.8rem;margin:0">시간이 괜찮다면 정밀로 답해 주시면 결과가 더 정확해져요. 상담에 쓰일 때는 정밀이 특히 도움이 돼요.</p>
+    </div>
+    <div class="card" data-pstep="1" hidden>
+      <h2><span class="seal">②</span> ${subj}은 어떤 사람인가요?</h2>
+      <p class="sub">각 문장이 ${subj}과 얼마나 맞는지 골라주세요.</p>
+      <div id="peerQs">${qhtmlFor(PEER_SHORT)}</div>
+    </div>
+    ${hasIpc ? `<div class="card" data-pstep="2" hidden>
+      <h2><span class="seal">③</span> 대인관계 질문 <span class="sub" style="font-weight:400">(선택 · 약 2분)</span></h2>
+      <p class="sub">${subj}이 무리 속에서 어떤 사람인지 골라주세요. 바쁘시면 건너뛰고 보내셔도 돼요.</p>
+      <div id="peerIpcQs">${ipcQsHtml('pi', subjSubject)}</div>
+      <div style="text-align:center;margin-top:14px"><button type="button" class="btn ghost sm" id="peer-skip">건너뛰고 보내기</button></div>
+    </div>` : ''}
+    <div class="wiz-nav" id="peer-nav">
+      <button type="button" class="btn ghost" id="peer-prev">이전</button>
+      <button type="button" class="btn grow" id="peer-next">다음</button>
+    </div>
+    <div id="peer-out"></div>
+    <div class="foot">緣 · ${APP_NAME}</div>
+    </div>`;
+  initQPager(document.getElementById('peerQs'));
+  if(hasIpc) initQPager(document.getElementById('peerIpcQs'));
+  let peerCount=PEER_SHORT;   // 지인이 고른 문항 수(기본 간단). 바꾸면 문항을 다시 그리되 이미 고른 답은 유지
+  document.querySelectorAll('#peer-len button').forEach(b=>b.onclick=()=>{
+    peerCount=+b.dataset.n;
+    document.querySelectorAll('#peer-len button').forEach(x=>x.classList.toggle('on',x===b));
+    const box=document.getElementById('peerQs'), keep=[...box.querySelectorAll('input:checked')].map(i=>[i.name,i.value]);
+    box.innerHTML=qhtmlFor(peerCount);
+    keep.forEach(([n,v])=>{ const el=box.querySelector('input[name="'+n+'"][value="'+v+'"]'); if(el) el.checked=true; });
+    initQPager(box);
+  });
+  const steps=[...app.querySelectorAll('[data-pstep]')], last=steps.length-1;
+  const prevB=document.getElementById('peer-prev'), nextB=document.getElementById('peer-next');
+  let cur=0;
+  const show=i=>{
+    cur=i;
+    steps.forEach((s,k)=>s.hidden=k!==cur);
+    app.querySelectorAll('.steps .st').forEach((b,k)=>{ b.classList.toggle('cur',k===cur); b.classList.toggle('done',k<cur); });
+    prevB.style.visibility = cur===0 ? 'hidden' : 'visible';
+    nextB.textContent = cur===last ? '평가 보내기 →' : '다음';
+    window.scrollTo(0,0);
+  };
+  const profAns=()=>{ const a=[]; for(let i=0;i<peerCount;i++){ const c=document.querySelector(`input[name="pb-${i}"]:checked`); a.push(c?+c.value:null); } return a; };
+  prevB.onclick=()=>{ if(cur>0) show(cur-1); };
+  nextB.onclick=()=>{
+    if(cur===1){ const n=document.getElementById('peerQs')._qpCheck(); if(n){ alert(`${n}개 문항이 남았어요 · 아래 번호를 눌러 답해주세요`); return; } }
+    if(cur<last){ show(cur+1); return; }
+    if(!hasIpc){ send(null); return; }
+    const ipc=ipcCollect('pi');
+    if(ipc.some(v=>v==null)){ document.getElementById('peerIpcQs')._qpCheck(); alert("대인관계 질문에 모두 답하거나, 아래 '건너뛰고 보내기'를 눌러주세요"); return; }
+    send(ipc);
+  };
+  const skipB=document.getElementById('peer-skip'); if(skipB) skipB.onclick=()=>send(null);
+  show(0);
+  async function send(ipc){
+    const prof=profAns();
+    prevB.disabled=nextB.disabled=true; const orig=nextB.textContent; nextB.textContent='보내는 중…'; if(skipB) skipB.disabled=true;
+    const rec={ subject_id:subjectId, reviewer_name:document.getElementById('peer-name').value.trim()||null,
+      relation:document.getElementById('peer-rel').value, profile:prof };
+    if(ipc) rec.ipc=ipc;
+    const { error }=await sb.from('peer_reviews').insert(rec);
+    if(error){ console.error(error); prevB.disabled=nextB.disabled=false; nextB.textContent=orig; if(skipB) skipB.disabled=false;
+      document.getElementById('peer-out').innerHTML=`<p class="status err" style="text-align:center">전송 실패: ${esc(error.message)}</p>`; return; }
+    steps.forEach(s=>s.hidden=true);
+    document.getElementById('peer-nav').remove();
+    app.querySelectorAll('.steps .st').forEach(b=>{ b.classList.remove('cur'); b.classList.add('done'); });
+    const startUrl=location.origin+location.pathname+'?ref='+encodeURIComponent(subjectId);   // 지인 평가 링크 하나로 초대까지(가입 시 지인 연결)
+    document.getElementById('peer-out').innerHTML=`<div class="card" style="border-color:var(--gold);margin-top:16px">
+      <h2><span class="seal">✓</span> 평가가 전송되었어요</h2>
+      <p class="sub">소중한 응답 감사합니다.</p>
+      <div style="border-top:1px solid var(--line);margin:14px 0 0;padding-top:14px">
+        <div style="display:flex;justify-content:center;margin-bottom:8px"><img src="icon.png" alt="분석 앱 아이콘" width="84" height="84" style="border-radius:18px;display:block"></div>
+        <p style="text-align:center;font-weight:700;margin:0 0 4px">당신은 어떤 사람일까요?</p>
+        <p class="sub" style="text-align:center;font-size:.85rem">사주와 성향, 그리고 <b>지인이 본 나</b>까지 —<br>세 겹의 나를 한눈에 보는 <b>${esc(APP_NAME)}</b>.</p>
+        <div style="text-align:center;margin-top:12px"><a class="btn" href="${startUrl}" style="text-decoration:none;display:inline-block">나도 시작하기 →</a></div>
+      </div></div>`;
+    window.scrollTo(0,0);
+  }
+}
 async function loadProfile(){
   const { data, error } = await sb.from('profiles').select('*').eq('id', me.id).single();
   if(error){ console.error(error); profile=null; return; }
@@ -2055,7 +2164,7 @@ function testsState(){
   return { prof, profN:p.profile_count||0, ipc, prefN, prefT:prefItems.length };
 }
 // 지인 링크 하나 — 지인 평가(#peer) 링크. 평가 뒤 '나도 시작하기'가 초대(ref)를 실어 가입하면 지인 궁합에도 연결
-function peerLink(){ return MATING+'#peer?u='+encodeURIComponent(me.id)+'&n='+encodeURIComponent((profile&&profile.nickname)||''); }
+function peerLink(){ return location.origin+location.pathname+'#peer?u='+encodeURIComponent(me.id)+'&n='+encodeURIComponent((profile&&profile.nickname)||''); }
 async function sharePeerLink(btn){
   const link=peerLink(), nick=(profile&&profile.nickname)||'';
   const text=`${nick?nick+'님이 ':''}"지인이 본 나"를 궁금해해요. 1분 평가 부탁드려요 🙏`;
