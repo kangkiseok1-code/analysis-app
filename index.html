@@ -428,7 +428,22 @@ html{-webkit-tap-highlight-color:transparent}
 .rel-act > b{width:100%;font-size:.8rem;color:var(--gold)}
 .s12-bases{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .s12-bases .rd-tg{height:30px;padding:0 12px}
-.s12-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.s12-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.s12{border:1px solid var(--line);border-radius:10px;padding:7px 3px 6px;text-align:center;line-height:1.35;background:var(--card);opacity:.78}
+.s12 b{display:block;font-size:.76rem;white-space:nowrap}
+.s12 span{font-size:1rem;font-family:var(--serif)}
+.s12 small{display:block;font-size:.68rem;color:var(--sub);white-space:nowrap}
+.s12 i{display:inline-block;margin-top:3px;padding:1px 7px;border-radius:999px;font-style:normal;font-size:.68rem;font-weight:700;background:var(--gold);color:#fff}
+.s12.hit{opacity:1;border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 1px var(--gold)}
+.s12-lead{font-size:.84rem;line-height:1.6;margin:0 0 10px;word-break:keep-all}
+.s12-hits{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.s12-hit{border:1.5px solid var(--gold);background:var(--gold-soft);border-radius:12px;padding:9px 10px;line-height:1.4}
+.s12-hit b{display:block;font-size:.92rem}
+.s12-hit span{font-family:var(--serif);font-size:1.15rem;margin-right:6px}
+.s12-hit em{font-style:normal;font-size:.76rem;font-weight:700;color:var(--gold)}
+.s12-hit small{display:block;font-size:.76rem;color:var(--sub)}
+.s12-sub{font-size:.76rem;color:var(--sub);margin:0 0 6px}
+@media(max-width:520px){ .s12-grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
 .rel-row.on{box-shadow:inset 0 0 0 2px var(--ink)}
 .rel-card[data-mode="luck"] .rel-row[data-nat]{opacity:.6}
 .rd-tgs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px}
@@ -1374,19 +1389,23 @@ function sinsalHtml(natal){
   return (rows||`<p class="sub">해당하는 신살이 없습니다.</p>`) + gmRow;
 }
 // 십이신살 — 기준 기둥의 지지(삼합)로 12칸을 정하고, 원국 지지가 걸리는 칸을 표시. 기준 = 일지(확정, 2026-10-14), 時·月·年은 비교용.
+const S12_MEAN={지살:'이동·시작',년살:'매력·인기',월살:'막힘·소모',망신살:'드러남·구설',장성살:'중심·권위',반안살:'안정·승진',역마살:'이동·변화',육해살:'고생·잔병',화개살:'예술·고독',겁살:'뺏김·급변',재살:'갈등·사고',천살:'불가항력'};
 function sinsal12Html(natal){
   if(!E.sinsal.twelveSinsalMap) return '';
   const ids=['hour','day','month','year'].filter(k=>natal[k]);
-  const HAN={hour:'時',day:'日',month:'月',year:'年'}, PN={hour:'시지',day:'일지',month:'월지',year:'연지'};
+  const PN={hour:'시지',day:'일지',month:'월지',year:'연지'};
+  const nm=n=>n==='년살'?'년살(도화)':n;
   const panes=ids.map(k=>{
     const map=E.sinsal.twelveSinsalMap(JI[natal[k].ji]); if(!map) return '';
-    const cells=Object.entries(map).map(([name,ji])=>{
-      const hits=ids.filter(x=>x!==k&&JI[natal[x].ji]===ji).map(x=>PN[x]);
-      return `<div class="s12${hits.length?' hit':''}"><b>${name==='년살'?'년살(도화)':name}</b><span>${ji}</span><i>${hits.join('·')||'—'}</i></div>`;
-    }).join('');
-    return `<div class="s12-pane" data-sb="${k}"${k==='day'?'':' hidden'}><div class="s12-grid">${cells}</div><p class="sub fine" style="font-size:.76rem;margin-top:6px">기준: ${PN[k]} ${JI[natal[k].ji]}${k==='day'?' (상담도구 기본 기준)':' (비교용)'}</p></div>`;
+    const items=Object.entries(map).map(([name,ji])=>({name,ji,hits:ids.filter(x=>x!==k&&JI[natal[x].ji]===ji).map(x=>PN[x])}));
+    const hit=items.filter(x=>x.hits.length);
+    const hitHtml=hit.length
+      ? `<div class="s12-hits">${hit.map(x=>`<div class="s12-hit"><b>${nm(x.name)}</b><span>${x.ji}</span><em>내 ${x.hits.join('·')}</em><small>${S12_MEAN[x.name]}</small></div>`).join('')}</div>`
+      : `<p class="sub" style="margin:0 0 8px">${PN[k]} 말고 다른 기둥에 걸린 십이신살이 없어요.</p>`;
+    const cells=items.map(x=>`<div class="s12${x.hits.length?' hit':''}"><b>${nm(x.name)}</b><span>${x.ji}</span><small>${S12_MEAN[x.name]}</small>${x.hits.length?`<i>내 ${x.hits.join('·')}</i>`:''}</div>`).join('');
+    return `<div class="s12-pane" data-sb="${k}"${k==='day'?'':' hidden'}><p class="s12-lead">내 <b>${PN[k]} ${JI[natal[k].ji]}</b>${k==='day'?'':'(비교용)'}를 기준으로 12신살 자리를 정했어요. 색이 칠해진 곳이 <b>내 원국에 실제로 있는 신살</b>이에요.</p>${hitHtml}<div class="s12-sub">전체 12자리 (지살부터 순서대로)</div><div class="s12-grid">${cells}</div>${k==='day'?'':'<p class="sub fine" style="font-size:.76rem;margin-top:6px">상담도구 기본 기준은 일지예요.</p>'}</div>`;
   }).join('');
-  return `<div class="s12-wrap"><div class="s12-bases"><span class="sub">십이신살 기준</span>${ids.map(k=>`<button type="button" class="rd-tg s12-b" data-sb="${k}" aria-pressed="${k==='day'}" style="--c:var(--ink)">${HAN[k]}</button>`).join('')}</div>${panes}</div>`;
+  return `<div class="s12-wrap"><div class="s12-bases"><span class="sub">기준 기둥</span>${ids.map(k=>`<button type="button" class="rd-tg s12-b" data-sb="${k}" aria-pressed="${k==='day'}" style="--c:var(--ink)">${PN[k]}</button>`).join('')}</div>${panes}</div>`;
 }
 // 분석 탭 카드 배선 — 탭 전환 + 십이신살 기준 바꾸기
 function wireAnaCard(root){
