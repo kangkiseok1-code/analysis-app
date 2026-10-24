@@ -20,62 +20,20 @@
 #app{max-width:640px;margin:0 auto;padding:28px 18px 60px}
 h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .seal{color:var(--gold)}
-.tab-group{display:flex;align-items:center;font-size:.72rem;color:var(--muted);font-weight:700;padding:0 2px;flex:0 0 auto;letter-spacing:.02em}
-.tab-div{flex:0 0 auto;width:1px;align-self:stretch;background:var(--line)}
-.tab-break{flex-basis:100%;height:0}
-.tab-badge{display:inline-block;min-width:16px;padding:0 4px;background:var(--danger);color:#fff;border-radius:9px;font-size:.7rem;line-height:16px;text-align:center;vertical-align:middle}
 .onboard-steps{display:flex;gap:8px;justify-content:center;align-items:center;margin:6px 0;color:var(--muted);font-weight:700;font-size:.92rem}
 .onboard-steps .on{color:var(--gold)}
 .onboard-steps .sep{color:var(--line-strong)}
-.gate-head{text-align:center;margin-bottom:6px}
 /* 랜딩(첫 인상) 페이지 */
-.landing{max-width:420px;margin:0 auto;text-align:center;min-height:calc(100vh - 88px);display:flex;flex-direction:column;justify-content:center;padding:24px 0}
-.brand-symbol{display:flex;justify-content:center;margin-bottom:16px;animation:sym-in .9s cubic-bezier(.2,.7,.2,1) both}
 @keyframes sym-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
-.landing-title{font-family:var(--serif);font-size:3.4rem;font-weight:700;letter-spacing:.14em;margin:2px 0 0;color:var(--ink)}
-.landing-sub{font-size:1rem;color:var(--sub);margin:4px 0 0;font-weight:600;letter-spacing:.02em}
-.landing-tag{font-size:.95rem;color:var(--sub);line-height:1.75;margin:18px auto 0;max-width:330px}
-.lq{max-width:420px;margin:16px auto 0;padding:18px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);text-align:center;line-height:1.75;font-size:.93rem;color:var(--ink);font-family:'Gowun Batang',serif;word-break:keep-all;cursor:pointer;min-height:0;display:flex;flex-direction:column;justify-content:center}
-.lq span{display:block}
-.lq span+span{margin-top:.8em}
-.lq .nw{font-style:normal;white-space:nowrap}
-.lq .lq-sign{margin-top:12px!important;color:var(--muted);font-size:1.2rem;font-family:'Nanum Pen Script',cursive}
-.lq-dots{display:flex;justify-content:center;gap:2px;margin:6px 0 0}
-.lq-dots button{background:none;border:0;padding:10px 6px;cursor:pointer;min-height:0;width:auto}
-.lq-dots i{display:block;width:8px;height:8px;border-radius:50%;background:var(--line-strong);transition:background .2s,width .2s}
-.lq-dots button.on i{background:var(--gold);width:18px;border-radius:4px}
-.landing-cta{display:flex;flex-direction:column;gap:11px;margin:30px auto 0;max-width:300px;width:100%}
-.landing-cta .btn{width:100%;padding:14px;font-size:1rem}
-.landing .foot{margin-top:28px}
-.hub-cards{display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}
-.hub-card{flex:1 1 200px;min-height:150px;border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:.15s;font-family:inherit}
-@media(hover:hover){.hub-card:hover{border-color:var(--gold);box-shadow:0 4px 18px rgba(0,0,0,.06)}}
-.hub-emoji{font-size:2.4rem;line-height:1}
-.hub-title{font-size:1.3rem;font-weight:800;color:var(--ink)}
-.hub-desc{font-size:.85rem;color:var(--muted);text-align:center;line-height:1.5}
-.hub-desc .soon{display:inline-block;margin-top:4px;font-size:.72rem;background:var(--surface-2);color:var(--muted);padding:1px 8px;border-radius:10px}
-.member{border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:8px 0;background:var(--card)}
-.adm-row{cursor:pointer}.adm-row:hover{border-color:var(--ink)}
-.adm-head{display:flex;align-items:center;gap:12px;margin:4px 0}
-.adm-kv{display:grid;grid-template-columns:72px minmax(0,1fr);gap:6px 10px;font-size:.88rem;line-height:1.5}.adm-kv b{font-weight:700}.adm-kv span{word-break:keep-all}
-.adm-note{border-bottom:1px solid var(--line);padding:6px 0 8px;margin-bottom:8px;font-size:.88rem}
-.adm-cand{display:flex;align-items:center;gap:10px}.adm-cand .btn{flex:none;white-space:nowrap}
-.adm-pair{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
-.adm-side{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
-.adm-amp{color:var(--fire);font-size:1.2rem}
 /* 사람별 오행 빛 — 오행 비율 상위 3개를 보석색 원으로 겹침 */
 .aura{position:relative;overflow:hidden;background:var(--line);isolation:isolate}
 .aura-o{position:absolute;border-radius:50%;aspect-ratio:1/1;opacity:.82}
 .aura-in{position:relative;z-index:1}
-.on-a{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.38)}
 .plate{background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);border-radius:14px;padding:7px 12px;min-width:0}
 .av-ring{display:inline-flex;padding:2.5px;border-radius:50%;background:var(--rc);flex:none}
-.ps-hero{border-radius:22px;height:168px;margin:4px 0 10px}
-.ps-hero .aura-in{height:100%;box-sizing:border-box;display:flex;align-items:flex-end;gap:12px;padding:12px}
 .me-hero{display:block;width:100%;border:none;border-radius:22px;height:150px;padding:0;text-align:left;cursor:pointer;font-family:inherit}
 .me-hero{cursor:default}
-.me-hero .aura-in,.home-hero .aura-in{height:100%;box-sizing:border-box;display:flex;align-items:flex-end;gap:12px;padding:12px}
-.home-hero{border-radius:22px;height:150px;margin:4px 0 12px}
+.me-hero .aura-in{height:100%;box-sizing:border-box;display:flex;align-items:flex-end;gap:12px;padding:12px}
 .me-top{display:flex;align-items:center;justify-content:space-between;margin:8px 0 8px}
 .me-top .home-h1{margin:0}
 .h2-act{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -83,8 +41,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .fr-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px 0;border:none;border-top:1px solid var(--line);background:none;font:inherit;color:var(--ink);cursor:pointer}
 .fr-row:first-child{border-top:none}
 .chip-el{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:700;white-space:nowrap}
-.k-wood{background:rgba(14,138,95,.13);color:var(--wood)}.k-water{background:rgba(42,73,200,.12);color:var(--water)}.k-fire{background:rgba(200,38,79,.12);color:var(--fire)}.k-earth{background:rgba(224,149,27,.15);color:var(--gold)}
-.me-list .quiet,.me-list .quiet .ic{color:var(--muted)}
+.k-water{background:rgba(42,73,200,.12);color:var(--water)}
 .notes-toggle-bar{text-align:center;margin:8px 0}
 /* 요약 카드 (나 탭) — 누르면 상세가 펼쳐짐 */
 .sumcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
@@ -95,9 +52,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .sum-more .o,.sumcard[open] .sum-more .c{display:none}.sumcard[open] .sum-more .o{display:inline}
 .sum-detail{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
 .sum-detail>.card{border:none;padding:0;margin:0}
-.sum-big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.sum-big>b{font-size:2rem;font-weight:800;line-height:1.1}
 .sum-bar{display:flex;align-items:center;gap:8px;margin:5px 0}.sum-bar span{width:54px;font-size:.82rem}.sum-bar b{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.sum-bar b i{display:block;height:100%;border-radius:4px}.sum-bar em{width:28px;text-align:right;font-style:normal;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.sum-chips{display:flex;gap:6px;flex-wrap:wrap}
 .sum-sub{font-size:.74rem;color:var(--muted);font-weight:700;margin:8px 0 2px}.sum-sub:first-child{margin-top:0}
 .sum-pic{max-width:240px;margin:0 auto 6px}.sum-pic svg{display:block;width:100%;margin:0 auto}
 .sumcard[open] .sum-pic{display:none}   /* 펼치면 아래 상세에 같은 그래프가 있으니 미리보기 그림은 숨김 */
@@ -118,39 +73,10 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .tg-line{font-size:.9rem;margin:8px 0 0;line-height:1.55}
 .tg-radar{display:block;width:100%;max-width:280px;margin:0 auto}
 .tg-sw{display:inline-block;width:14px;height:3px;border-radius:2px}.tg-sw-dash{background:none;border-top:2px dashed #7b5cc4;height:0}
-.home-sec{font-weight:800;font-size:1rem;margin:16px 2px 8px}
-.home-recs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ha-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.ha-tile{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px 12px;border:1px solid var(--line);border-radius:18px;background:var(--card);font-family:inherit;color:var(--ink);cursor:pointer;text-align:center;min-width:0}
-.ha-tile .sub{font-size:.72rem}.ha-tile b{font-size:.9rem;line-height:1.3;word-break:keep-all}
-.ha-line{font-size:.72rem;color:var(--sub);line-height:1.4;margin-top:2px;word-break:keep-all}
 .nm-head{padding:2px 2px 4px}.nm-head .sub{font-size:.8rem;margin:0}.nm-name{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin:2px 0}
-.home-rec{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1px solid var(--line);border-radius:18px;background:var(--card);font:inherit;color:var(--ink);cursor:pointer}
-#h-news{margin-top:0}
-.m-card{cursor:pointer}.m-card:active{background:var(--bg)}
-/* 인연 목록 필터 — 한 줄 요약 + 필터 버튼, 누르면 펼침 */
-.m-sum{display:flex;align-items:center;gap:10px;margin:2px 0 8px}
-.m-sum span{flex:1;min-width:0;font-size:.85rem;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* 아래에서 올라오는 시트 (인연 › 필터) */
-.sheet-bg{position:fixed;inset:0;background:rgba(18,18,18,.35);z-index:60;display:flex;align-items:flex-end;justify-content:center}
-.sheet-bg[hidden]{display:none}   /* display:flex가 hidden 속성을 덮어쓰지 않게 */
-.sheet{width:min(640px,100%);max-height:88vh;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:22px 22px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom))}
-.sheet-bg:not([hidden]){animation:jm-fade var(--dur-base) linear both}   /* 열릴 때 배경 페이드 + 시트 아래서 올라옴 */
-.sheet-bg:not([hidden]) .sheet{animation:jm-slide-up var(--dur-slow) var(--ease-out) both}
-.sheet-grab{width:38px;height:4px;border-radius:2px;background:var(--line-strong);margin:0 auto 10px}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;font-size:1.05rem}
-.sheet-checks{display:flex;flex-direction:column;gap:6px;margin-top:12px}
-.sheet-checks label{display:flex;gap:8px;align-items:center;font-weight:400;font-size:.9rem;margin:0}
-.sheet-checks input{width:auto}
-.member b{font-size:1rem}
 .badge{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:10px;background:var(--gold-soft);color:var(--gold);margin-left:6px}
 /* 2단계 회원 */
 .tier1 .av-other{filter:blur(7px)}
-.tier-banner{font-size:.82rem;line-height:1.6;margin:8px 0 12px;padding:10px 12px;border-radius:10px;background:var(--gold-soft);color:var(--ink);word-break:keep-all}
-.tier-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:12px 0}
-.tier-table th,.tier-table td{padding:7px 4px;border-bottom:1px solid var(--line);text-align:center;word-break:keep-all}
-.tier-table td:first-child,.tier-table th:first-child{text-align:left}
-.tier-ok{color:var(--ok);font-weight:600;text-align:center;margin-top:14px}
 /* 기호 그래프 */
 .pref-radars{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .pref-radar-box{text-align:center}
@@ -159,18 +85,11 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .pref-radar-n{font-size:.72rem;color:var(--muted);margin-top:-6px}
 .pref-radar-legend{display:flex;gap:14px;justify-content:center;font-size:.8rem;color:var(--sub);margin-top:6px}
 .pref-radar-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
-.badge.love{background:var(--danger-soft);color:var(--danger)}.badge.biz{background:var(--info-soft);color:var(--info)}
+.badge.love{background:var(--danger-soft);color:var(--danger)}
 .status{font-size:.85rem;margin:10px 0 0;min-height:1.2em}
 .status.ok{color:var(--ok)}.status.err{color:var(--danger)}
 /* 오행 성향 레이더 · 일치도 배지 (Slice 1 이식) */
-.radar-wrap{display:flex;justify-content:center;margin:4px 0 6px}
 .prof-sub{font-size:.9rem;font-weight:700;color:var(--ink);margin:14px 0 6px}
-.match-badge{display:flex;align-items:center;justify-content:center;gap:14px;max-width:330px;margin:2px auto 8px;padding:10px 14px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
-.match-num{font-size:2.1rem;font-weight:800;line-height:1;letter-spacing:-.02em}
-.match-num span{font-size:1rem;font-weight:700;margin-left:1px}
-.match-lab{font-size:.82rem;font-weight:600;color:var(--ink);line-height:1.35;word-break:keep-all}
-.match-lab>span{font-weight:500;color:var(--muted)}
-.match-gap{margin-top:3px;font-size:.77rem;font-weight:500;color:var(--ink)}
 /* 퍼셉션 갭 · 조하리 4분면 (Slice 2 이식) */
 .oh-box{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
 .oh-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
@@ -181,25 +100,12 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .oh-cmp3{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:2px 12px;max-width:300px;margin:8px auto 0;font-size:.85rem}
 .oh-cmp3>b{font-size:.78rem;text-align:right}
 .oh-cmp3>i{font-style:normal;text-align:right;color:var(--ink)}
-.jo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px;margin:8px auto 4px}
-.jo-cell{border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-height:78px}
-.jo-open{background:var(--ok-soft);border-color:var(--ok-soft)}
-.jo-blind{background:var(--danger-soft);border-color:var(--danger-soft)}
-.jo-hidden{background:var(--info-soft);border-color:var(--info-soft)}
-.jo-unknown{background:var(--bg);border-color:var(--line)}
-.jo-h{font-size:.76rem;font-weight:800;color:var(--ink);line-height:1.3}
-.jo-chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 5px}
-.jo-chip{color:#fff;font-weight:800;font-size:.82rem;width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.jo-none{color:var(--muted);font-size:.85rem}
-.jo-d{font-size:.7rem;color:var(--muted);line-height:1.3}
-.jo-cmp{max-width:300px}
 /* 참고설명(유파 고지·범례) — 기본 숨김, 'ⓘ 참고설명' 토글로 표시 */
 .fine{display:none}
 .notes-on .fine{display:revert}
 .notes-toggle-bar{text-align:right;margin:-2px 0 8px}
 .notes-toggle-bar button{font-size:.78rem;padding:5px 12px}
 /* 내 분석 서브탭 (사주 / 성향 / 퍼셉션 갭) */
-.rtabs{display:flex;gap:8px;margin:0 0 14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;overflow-x:auto;scrollbar-width:none}
 .rtab{flex:1 0 auto;white-space:nowrap;padding:11px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-weight:700;font-size:.88rem;color:var(--muted);cursor:pointer}
 .rtab.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .rpane[hidden]{display:none}
@@ -249,14 +155,9 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .reveal .gz-strip.natal>*:nth-child(2){animation-delay:70ms}.reveal .gz-strip.natal>*:nth-child(3){animation-delay:140ms}.reveal .gz-strip.natal>*:nth-child(4){animation-delay:210ms}
 .reveal .bar .fill,.reveal .sum-bar b i{transform-origin:left center;animation:jm-grow var(--dur-slow) var(--ease-out) 240ms both}
 /* 검사를 마쳐 새로 채워진 분석 칸: 톡 커졌다 돌아오며 금빛 링이 한 번 퍼짐 */
-.ha-tile.ha-new{animation:jm-pop var(--dur-slow) var(--ease-pop) both,jm-pulse 1.2s ease-out 1}
 .qp-miss{margin-top:10px;padding:8px 10px;border:1px solid var(--danger);border-radius:8px;font-size:13px;color:var(--danger);line-height:1.9}
 .qp-miss button{background:none;border:1px solid var(--danger);border-radius:6px;color:var(--danger);font:inherit;font-size:12px;padding:0 7px;margin:0 0 0 4px;min-height:0;width:auto;cursor:pointer;white-space:nowrap}
 /* 카카오 로그인 버튼 — 카카오 디자인 가이드 색(#FEE500 바탕·검정 글자) */
-.kakao-btn{width:100%;background:#FEE500;color:rgba(0,0,0,.85);border-color:#FEE500;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700}
-@media(hover:hover){.kakao-btn:hover{background:#f5dc00;border-color:#f5dc00}}
-.auth-or{display:flex;align-items:center;gap:10px;margin:16px 0 2px;color:var(--muted);font-size:.8rem}
-.auth-or::before,.auth-or::after{content:'';flex:1;height:1px;background:var(--line)}
 .oh-mode.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .oh-pane[hidden]{display:none}
 /* 십성 심리 번역 */
@@ -271,10 +172,6 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .ss-desc{font-size:.78rem;color:var(--sub);line-height:1.5}
 /* 퍼셉션 갭 자기인식 유형 배지 */
 .pg-badge{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:4px 0 12px}
-.pg-legend{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin:0 0 8px}
-.pg-legend span{display:inline-flex;align-items:center;gap:5px}
-.pg-legend i{width:14px;height:4px;border-radius:2px;display:inline-block}
-.oh-legend i.dash{background:none;height:0;border-top:2px dashed;border-radius:0}
 .pg-badge b{font-size:1rem}
 .pg-badge p{margin:2px 0 0;font-size:.8rem;color:var(--sub);line-height:1.5}
 .banner{background:var(--warn-soft);border:1px solid var(--gold-soft);border-radius:10px;padding:14px;font-size:.88rem;margin:12px 0}
@@ -339,12 +236,6 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
 .qpager .pref-sec-title{margin:0 0 4px;border-top:none;padding-top:0;font-size:.85rem}
 .qpager .q .qtext .opt{font-family:inherit;font-size:.8rem;font-weight:400;color:var(--muted)}
 #pref-body .pref-sec-title:first-child{border-top:none;padding-top:2px;margin-top:6px}
-/* 미니게임(우리 얼마나 통할까) */
-.mini-opt{border:1px solid var(--line);border-radius:9px;padding:9px 11px;margin:6px 0;font-size:.9rem;color:var(--sub);cursor:pointer;transition:.12s}
-.mini-opt.sel{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.mini-opt.ans{border-color:var(--ok);color:var(--ok);font-weight:600;background:var(--ok-soft)}
-.mini-opt.wrong{border-color:var(--danger-soft);color:var(--danger)}
-.mini-pct{font-size:2rem;font-weight:800;color:var(--gold);font-family:var(--serif);line-height:1}
 /* ===== 앱 셸 — 상단바 + 내비 (모바일: 아래 탭바 5칸 / PC: 왼쪽 사이드바) ===== */
 .m-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-8px 0 6px}
 .m-brand{display:flex;align-items:baseline;gap:6px;font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--ink);background:none;border:none;padding:0;cursor:pointer}
@@ -357,7 +248,6 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
   .m-top{display:none}   /* PC는 사이드바에 로고·내 정보가 있음 */
 }
 /* ===== 홈 ===== */
-.home-hi{font-size:14px;color:var(--sub);margin-top:8px}
 .home-h1{margin:2px 0 14px;font-size:27px;line-height:1.3;font-weight:800;letter-spacing:-.03em}
 /* 분할 버튼(화면 안 전환) — 인연 목록/지도 등 */
 .seg{display:flex;background:var(--line);border-radius:999px;padding:3px;margin:4px 0 12px}
@@ -365,22 +255,7 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
 .seg5 button{padding:8px 0;font-size:.8rem;letter-spacing:-.02em}
 .seg button small{display:block;font-size:.72rem;font-weight:400;color:var(--muted);margin-top:1px}
 .seg button.on{background:var(--card);color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.row-link{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:14px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--ink);text-align:left;font-family:inherit;cursor:pointer}
-@media(hover:hover){.row-link:hover{border-color:var(--ink)}}
-.row-link .rl-ic{width:40px;height:40px;flex:none;border-radius:20px;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;color:var(--gold)}
-.row-link .rl-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.row-link .rl-t{font-size:15px;font-weight:600}
-.row-link .rl-s{font-size:12px;color:var(--sub)}
-.row-link.soon{border-style:dashed;color:var(--sub)}
-.home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
-.home-tile{min-height:96px;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:10px;text-align:left;font-family:inherit;color:var(--ink);cursor:pointer}
-@media(hover:hover){.home-tile:hover{border-color:var(--ink)}}
-.home-tile .ic{width:24px;height:24px;color:var(--gold)}
-.home-tile b{font-size:15px;font-weight:600}
 /* ===== 내 정보 ===== */
-.me-card{padding:18px;border-radius:18px;background:var(--ink);color:var(--bg);display:flex;align-items:center;gap:14px}
-.me-card .me-name{font-size:20px;font-weight:800}
-.me-card .me-sub{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 .admin-badge{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--ink);color:#fff;font-size:.7rem;font-weight:700;vertical-align:middle;white-space:nowrap}
 .acct-card{margin-top:12px;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
 .acct-main{font-weight:700;font-size:.95rem;margin-top:2px;word-break:break-all}
@@ -391,15 +266,10 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
 .me-list .ic{color:var(--gold)}
 .me-list .ml-main{flex:1;display:flex;flex-direction:column}
 .me-list .ml-s{font-size:12px;color:var(--sub)}
-.me-list .danger,.me-list .danger .ic{color:var(--danger)}
 /* 퍼셉션 갭 — 성향 이름·눌러서 보기 (상담도구와 동일) */
-.radar-wrap svg{width:100%;max-width:280px;height:auto}
-.jo-chip.tr{width:auto;height:auto;border-radius:999px;padding:2px 8px;font-size:.74rem;white-space:nowrap}
-.jo-chip small{font-weight:600;opacity:.85;margin-left:3px;font-size:.66rem}
 .gd-oh{font-size:.74rem;font-weight:700;white-space:nowrap}
 .gd-ohline{margin:6px 0 0;font-size:.8rem;line-height:1.55;color:var(--sub);background:var(--bg);border-radius:10px;padding:8px 10px}
 .gap-detail{margin-top:10px;word-break:keep-all}   /* 한글 단어 중간 줄바꿈 방지 */
-.pg-hero .pg-badge p{word-break:keep-all}
 .gd-h{font-size:.9rem;font-weight:700;margin:14px 0 8px}
 .gd-row{padding:12px 14px;margin-bottom:8px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
 .gd-row.lv-l{border-color:var(--danger)}
@@ -454,14 +324,14 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
   .city-row .btn{white-space:nowrap}
 /* ===== 누르는 순간 반응 (hover는 마우스 기기만, 터치는 :active로) ===== */
 html{-webkit-tap-highlight-color:transparent}
-.btn,.tabs button,.hub-card,.me-hero,.ha-tile,.home-rec,.rtab,.chip,.mini-opt,.icon-btn,.seg button,.home-tile,.kakao-btn,.row-link,.me-list button,.fr-row,.m-card{touch-action:manipulation}
-.btn:active:not(:disabled),.tabs button:active,.hub-card:active,.me-hero:active,.ha-tile:active,.home-rec:active,.rtab:active,.chip:active,.icon-btn:active,.seg button:active,.home-tile:active,.kakao-btn:active{transform:scale(.97);transition:transform .1s ease-out}
-.row-link:active,.me-list button:active,.fr-row:active,.mini-opt:active{background:var(--surface-2)}
-.act-link:active,.pc-i:active,.lq-dots button:active{opacity:.6}
+.btn,.me-hero,.rtab,.chip,.icon-btn,.seg button,.me-list button,.fr-row{touch-action:manipulation}
+.btn:active:not(:disabled),.me-hero:active,.rtab:active,.chip:active,.icon-btn:active,.seg button:active{transform:scale(.97);transition:transform .1s ease-out}
+.me-list button:active,.fr-row:active{background:var(--surface-2)}
+.act-link:active,.pc-i:active{opacity:.6}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
-  .btn:active:not(:disabled),.tabs button:active,.hub-card:active,.me-hero:active,.ha-tile:active,.home-rec:active,.rtab:active,.chip:active,.icon-btn:active,.seg button:active,.home-tile:active,.kakao-btn:active{transform:none;opacity:.7}
+  .btn:active:not(:disabled),.me-hero:active,.rtab:active,.chip:active,.icon-btn:active,.seg button:active{transform:none;opacity:.7}
 }
 /* 상담도구에서 옮긴 분석 탭 스타일 */
 .oh-basics{margin:4px 0 10px;text-align:left}
@@ -498,7 +368,6 @@ html{-webkit-tap-highlight-color:transparent}
 .sinsal-where{font-size:.82rem;color:var(--gold);min-width:56px}
 .sinsal-desc{font-size:.86rem;color:var(--sub);word-break:keep-all}
 @media(max-width:560px){.rel-cols{gap:8px}.rel-list{gap:4px}.rel-row{gap:4px;padding:3px 7px;border-radius:6px}.rel-type{font-size:.68rem}.rel-chars{font-size:.82rem;letter-spacing:.5px}.rel-where{font-size:.64rem}.rel-elem{font-size:.7rem}.rel-note{font-size:.6rem}.rel-gh{font-size:.66rem;letter-spacing:1px}}
-.rel-card .rel-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
 .ohaeng-pent{display:flex;justify-content:center}
 .ohaeng-pent svg{width:100%;max-width:320px;height:auto}
 .og-name{fill:#fff;font-size:16px;font-weight:700;text-anchor:middle}
@@ -568,12 +437,11 @@ html{-webkit-tap-highlight-color:transparent}
 .rel-card[data-mode="natal"] .rd-tg[data-tg="nat"]{display:none}
 .rel-card.off-hap [data-k="hap"],.rel-card.off-chung [data-k="chung"],.rel-card.off-hpe [data-k="hpe"],.rel-card[data-mode="luck"].off-nat [data-nat]{display:none}
 .rel-num{min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;line-height:18px;text-align:center}
-.match-badge,.jo-grid,.pg-badge,.ohaeng-card .ohaeng-modes,.johari .ohaeng-modes{width:100%;max-width:360px;margin-left:auto;margin-right:auto;box-sizing:border-box}
+.pg-badge,.ohaeng-card .ohaeng-modes,.johari .ohaeng-modes{width:100%;max-width:360px;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .card.rel-card{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .card.rel-card h2{border-color:#3a3530}
 .card.rel-card .sub{color:#bdb4a5}
 .card.rel-card .sub b{color:#fff}
-.card.rel-card .rel-tag{color:var(--gold-soft)}
 </style>
 </head>
 <body>
@@ -609,7 +477,6 @@ function onboardStep(){ const p=profile||{};
   const hasBig5 = Array.isArray(p.big5)&&p.big5.some(x=>x);   // 구버전 사용자 호환
   if(!hasProfile && !hasBig5) return 'survey';
   return null; }
-function hasPrefs(p){ return !!(p&&p.prefs&&Object.keys(p.prefs).length); }
 
 const esc = s => (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 /* 로딩 뼈대(공통 .jn-skel) — '불러오는 중…' 글자 대신 */
@@ -624,7 +491,6 @@ const LIKERT = ['전혀\n아니다','아니다','보통','그렇다','매우\n�
 /* ===== 오행 성향(퍼셉션 갭) — counsel-tool 이식 (Slice 1) ===== */
 const OH_KEYS  = ['목','화','토','금','수'];
 const OH_COL   = { 목:'#2e7d32', 화:'#c0392b', 토:'#b08d34', 금:'#6b6b6b', 수:'#1f3a5f' };
-const OH_LABEL = { 목:'목 木 · 추진', 화:'화 火 · 표현', 토:'토 土 · 포용', 금:'금 金 · 원칙', 수:'수 水 · 통찰' };
 // 통합 성향 질문지: 각 문항 = 오행 축(oh) + Big5 요인(f). dir -1은 역채점. 앞20=간단, 전50=정밀.
 const PROFILE_Q = [
   { oh:'목', f:'C', dir: 1, q:'나는 목표가 생기면 망설이지 않고 바로 시작한다' },
@@ -855,67 +721,9 @@ function wireGapSelect(box, k0, onSel){
   sel(k0);
 }
 // 퍼셉션 갭 캐릭터 — 엔진 persona.matchCharacters(A,O): 같은 유형·핵심 성향 중 차이 모양이 가장 비슷한 작품 속 인물
-function josaGwa(w){ const c=(w||'').charCodeAt((w||'').length-1); return (c>=0xAC00&&c<=0xD7A3&&(c-0xAC00)%28) ? '과' : '와'; }
 function kindShort(k){ return /드라마/.test(k)?'드라마':/영화/.test(k)?'영화':'애니메이션'; }
 // 대표 캐릭터 한 명만 보여 준다 (기석님 결정 2026-09-29) — 나중에 캐릭터를 많이 늘리면 작은 점수 차에도 다른 인물이 나오게
 function charMatch(A, O){ try{ return (E && E.persona) ? E.persona.matchCharacters(A, O, { limit:1 }) : null; }catch(e){ return null; } }
-// 나를 대변하는 인물 — 내 성향(A)만으로. 캐릭터 '속마음(inner)' 벡터가 가장 가까운 인물. 지인 응답 불필요.
-function meCharacter(A){
-  try{
-    const list=(E && E.persona && E.persona.CHARACTERS)||null; if(!list||!list.length||!A) return null;
-    let best=null, bestD=Infinity;
-    for(const c of list){ if(!Array.isArray(c.inner)) continue;
-      let d=0; OH_KEYS.forEach((k,i)=>{ d+=Math.abs((+A[k]||0)-(+c.inner[i]||0)); });
-      if(d<bestD){ bestD=d; best=c; } }
-    if(!best) return null;
-    return { c:best, sim:Math.max(55, Math.min(99, Math.round(100 - 0.25*bestD))) };
-  }catch(e){ return null; }
-}
-// 홈·나 머리의 '나 캐릭터' (내 성향 A만으로. 성향 검사 전이면 빈 문자열)
-// 이미지5 스타일: 속/겉 뱃지 + "~처럼, 당신은…" 브리지(사주 기운 섞음). 지인 응답 오면 .mc-peer에 A 레이어 추가(loadMeCharPeer).
-function meCharMini(A){
-  const m=meCharacter(A); if(!m) return '';
-  const c=m.c, tname=k=>OH_TRAIT[k]?OH_TRAIT[k][2]:k;
-  const myTop=OH_KEYS.slice().sort((a,b)=>(+A[b]||0)-(+A[a]||0))[0];
-  let sTop=null; if(profile&&profile.birth_y){ try{ const t=auraTop(myDist()); if(t&&t[0]&&t[0].k) sTop=t[0].k; }catch(e){} }
-  const iga=w=>{ const ch=(w||'').charCodeAt((w||'').length-1); return (ch>=0xAC00&&ch<=0xD7A3&&(ch-0xAC00)%28!==0)?'이':'가'; };
-  let bridge=`${esc(c.name)}처럼, 당신의 가장 큰 결은 <b>${tname(myTop)}(${myTop} 기운)</b>이에요.`;
-  if(sTop) bridge += (sTop===myTop)
-    ? ` 사주 기운도 <b>${sTop}</b>${iga(sTop)} 강해, 성향과 타고난 기운이 같은 방향이에요.`
-    : ` 사주 기운은 <b>${sTop}</b>${iga(sTop)} 강해, 겉과 속에 서로 다른 결이 함께 있어요.`;
-  const oc=(typeof OH_COL!=='undefined'&&OH_COL[myTop])||'#c69a2e', han=(typeof AURA_HAN!=='undefined'&&AURA_HAN[myTop])||'緣';
-  return `<div class="pg-char me-charmini" style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 12px">
-      <div style="font-size:.68rem;letter-spacing:.1em;color:var(--gold);font-weight:700">나를 대변하는 인물</div>
-      <div style="display:flex;align-items:center;gap:12px;margin:9px 0 12px">
-        <div style="flex:none;width:52px;height:52px;border-radius:50%;border:1.5px solid ${oc};display:flex;align-items:center;justify-content:center;color:${oc};font-family:var(--serif,'Gowun Batang');font-size:1.35rem;font-weight:800">${han}</div>
-        <div style="min-width:0;flex:1"><div style="font-family:var(--serif,'Gowun Batang');font-size:1.3rem;font-weight:800;color:var(--ink);line-height:1.2">${esc(c.name)}</div>
-          <div style="font-size:.76rem;color:var(--muted);margin-top:2px">${kindShort(c.kind)} 〈${esc(c.work)}〉 · <b style="color:var(--gold)">${m.sim}% 닮음</b></div></div>
-      </div>
-      <div style="display:flex;gap:8px;margin-bottom:11px">
-        <div style="flex:1;background:var(--gold-soft);border-radius:10px;padding:8px 10px"><div style="font-size:.64rem;color:var(--muted)">속</div><div style="font-size:.8rem">“${esc(c.innerLine)}”</div></div>
-        <div style="flex:1;background:var(--gold-soft);border-radius:10px;padding:8px 10px"><div style="font-size:.64rem;color:var(--muted)">겉</div><div style="font-size:.8rem">${esc(c.outerLine)}</div></div>
-      </div>
-      <div style="border-left:3px solid ${oc};border-radius:0;padding:1px 0 1px 11px;font-size:.84rem;color:var(--ink);line-height:1.55">${bridge}</div>
-      <div class="mc-peer"></div>
-    </div>`;
-}
-// 지인 응답이 있으면 '지인이 본 나'(맹점/숨김/투명형 한 줄)를 .mc-peer에 채움. 지인 전이면 아무것도 안 함.
-async function loadMeCharPeer(){
-  if(!me||!profile||!Array.isArray(profile.profile)||!profile.profile.some(x=>x)) return;
-  const slots=document.querySelectorAll('.me-charmini .mc-peer'); if(!slots.length) return;
-  let rows=[]; try{ const { data }=await sb.from('peer_reviews').select('profile').eq('subject_id', me.id); rows=data||[]; }catch(e){ return; }
-  if(!rows.length || !document.querySelector('.me-charmini .mc-peer')) return;
-  const A=scoreProfile(profile.profile).oh, O=scoreProfile(peerAggProfile(rows)).oh;
-  const g=pgTopDiff(A, O), tn=OH_TRAIT[g.k]?OH_TRAIT[g.k][2]:g.k;
-  let badge, line;
-  if(Math.abs(g.d)<=PG_GAP){ badge='투명형'; line='안과 밖이 거의 같아요. 보이는 그대로의 사람이에요.'; }
-  else if(g.d>0){ badge='맹점형'; line=`지인은 당신의 <b>${tn}(${g.k} 기운)</b>을 스스로 느끼는 것보다 <b>더 크게</b> 봐요. 몰랐던 강점일 수 있어요.`; }
-  else { badge='숨김형'; line=`<b>${tn}(${g.k} 기운)</b>은 스스로 느끼는 만큼 밖으로 <b>덜 드러나요</b>. 표현하면 더 알려질 모습이에요.`; }
-  const html=`<div style="border-top:1px dashed var(--line);margin-top:10px;padding-top:10px">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><b>지인이 본 나</b> <span class="badge" style="background:var(--gold-soft);color:var(--gold)">${badge}</span></div>
-      <p style="margin:0;font-size:.85rem;color:var(--ink);line-height:1.5">${line}</p></div>`;
-  document.querySelectorAll('.me-charmini .mc-peer').forEach(s=>{ s.innerHTML=html; });
-}
 // 인물과 나를 잇는 한 문장 — 유형별 틀에 인물 이름·핵심 성향만 넣는다
 function charBridge(m){
   const n=esc(m.main.name), t=`<b>${m.traitLabel}</b>`;
@@ -1638,29 +1446,6 @@ function wireAnaTabs(pane){
   }; });
 }
 /* ===== /옮긴 분석 묶음 ===== */
-function renderDeepHtml(dp, dayElem){
-  if(!dp)return '<p class="sub">심화 분석에는 태어난 시가 필요할 수 있어요.</p>';
-  const sibsinMax=Math.max(...Object.values(dp.sibsin),1);
-  const sColor=k=>ELEM_HEX[sibsinElem(dayElem,k)]||'#999';
-  return `<div class="deep-grid">
-      <div class="deep-box">
-        <div class="deep-label">신강 · 신약</div>
-        <div class="deep-big" style="color:${dp.status==='신강'?'var(--danger)':'var(--water)'}">${dp.gangyakLabel&&dp.gangyakLabel!==dp.gangyakGrade?dp.gangyakLabel:dp.status}</div>
-        <div class="deep-note">일간을 돕는 힘 ${Math.round(dp.helpRatio*100)}%${dp.monthHelps?' · 월령 득(得)':' · 월령 실(失)'}</div>
-      </div>
-      <div class="deep-box">
-        <div class="deep-label">용신 (자동 추정)</div>
-        <div class="deep-big">${dp.yongsin.map(e=>`<span class="yong-chip" style="background:${ELEM_HEX[e]}">${e}</span>`).join(' ')}</div>
-        <div class="deep-note">${dp.reason}</div>
-      </div>
-    </div>
-    <div class="deep-box" style="margin-top:12px">
-      <div class="deep-label">십신 분포 — 가장 두드러진 건 '${dp.topSibsin}'</div>
-      <div class="sibsin-bars">${Object.entries(dp.sibsin).map(([k,v])=>`<div class="bar"><div class="name" style="color:${sColor(k)};width:44px">${k}</div><div class="track"><div class="fill" style="width:${Math.round(v/sibsinMax*100)}%;background:${sColor(k)}"></div></div><div class="val">${v}</div></div>`).join('')}</div>
-      <p class="deep-note" style="margin-top:8px">${SIBSIN_DESC[dp.topSibsin]}이 강해요.</p>
-    </div>
-    <p class="sub fine" style="margin-top:10px;font-size:.82rem">신강·신약과 용신은 억부 원칙에 따른 <b>자동 추정</b>이에요. 유파에 따라 달라질 수 있으니 참고용으로 봐주세요.</p>`;
-}
 // 프로필(생년월일) → 사주 계산 결과 객체
 function computeFromProfile(p){
   initEngineRefs();
@@ -2174,8 +1959,6 @@ async function sharePeerLink(btn){
   try{ await navigator.clipboard.writeText(link); btn.textContent='✓ 링크 복사됨 — 지인에게 보내세요'; setTimeout(()=>btn.textContent=orig,2200); }
   catch(_){ prompt('아래 링크를 지인에게 보내세요', link); }
 }
-// 지인 평가 '새로 답함' — 이 기기에서 마지막으로 본 응답 수와 비교
-function peerSeenGet(){ try{ return +localStorage.getItem('mating_peer_seen_'+me.id)||0; }catch(e){ return 0; } }
 async function markPeerSeen(){
   if(!me) return; const { count }=await sb.from('peer_reviews').select('id',{count:'exact',head:true}).eq('subject_id',me.id);
   try{ localStorage.setItem('mating_peer_seen_'+me.id, String(count||0)); }catch(e){}
@@ -2500,11 +2283,6 @@ const MBTI_IDS=['m1','m2','m3','m4','m5','m6','m7','m8'];
 const ATTACH_IDS=['at1','at2','at3','at4','at5'];
 const INTUITION_IDS=['n1','n2','n3','n4','n5','n6','n7'];
 const PREF_BY_ID={}; PREF_SECTIONS.forEach(s=>s.items.forEach(it=>{ PREF_BY_ID[it.id]=it; }));
-// 찾는 목적(다중 선택). 구인구직(비즈니스 확장)은 추후 발전사항.
-const PURPOSE_OPTS=[['love','연애'],['social','친목'],['hobby','취미'],['business','비즈니스']];
-const PURPOSE_KR=Object.fromEntries(PURPOSE_OPTS);
-// 인연 방의 '찾는 목적' — 비즈니스는 별도 방이라 제외 (연애·친목·취미)
-const LOVE_PURPOSE_OPTS=PURPOSE_OPTS.filter(([v])=>v!=='business');
 function purposesOf(o){   // purposes 배열 우선, 없으면 레거시 purpose(단일/both)에서 유추
   if(o&&Array.isArray(o.purposes)&&o.purposes.length) return o.purposes;
   if(o&&o.purpose==='both') return ['love','business'];
@@ -2756,17 +2534,6 @@ function myNames(p, dist){
 function nameHeadHtml(label, nm){
   return nm ? `<div class="nm-head"><div class="sub">${label}</div><div class="nm-name">${esc(nm.name)}</div><div class="sub">${esc(nm.line)}</div></div>` : '';
 }
-// 홈 '나의 분석' 작은 그래프 — 성향 오각형 · 대인관계 원 · 기호(라이프스타일) 오각형. 데이터 없으면 빈 틀
-function miniPentaSvg(vals, col){
-  const C=36, R=28, P=(i,r)=>[(C+r*Math.cos(-Math.PI/2+i*2*Math.PI/5)).toFixed(1),(C+2+r*Math.sin(-Math.PI/2+i*2*Math.PI/5)).toFixed(1)].join(',');
-  const frame=`<polygon points="${[0,1,2,3,4].map(i=>P(i,R)).join(' ')}" fill="none" stroke="var(--line)"/>`;
-  const shape=vals?`<polygon points="${vals.map((v,i)=>P(i,R*Math.max(.08,v))).join(' ')}" fill="${col}" fill-opacity=".2" stroke="${col}" stroke-width="1.6"/>`:'';
-  return `<svg viewBox="0 0 72 70" width="64" height="62" aria-hidden="true">${frame}${shape}</svg>`;
-}
-function miniIpcSvg(s){
-  const r=s?Math.min(1,s.length/1.5)*26:0, a=s?s.angle*Math.PI/180:0;
-  return `<svg viewBox="0 0 72 70" width="64" height="62" aria-hidden="true"><circle cx="36" cy="35" r="28" fill="none" stroke="var(--line)"/><line x1="8" y1="35" x2="64" y2="35" stroke="var(--line)"/><line x1="36" y1="7" x2="36" y2="63" stroke="var(--line)"/>${s?`<circle cx="${(36+r*Math.cos(a)).toFixed(1)}" cy="${(35-r*Math.sin(a)).toFixed(1)}" r="5.5" fill="var(--water)"/>`:''}</svg>`;
-}
 let pendingResultTab=null;   // 홈 등에서 '내 분석' 진입 시 열 탭(saju/trait/pref/ipc/peer) 지정
 // 요약 카드 — 처음엔 한두 줄 요약, 누르면 그 자리에서 상세가 펼쳐짐 (애플 건강 앱 방식)
 function sumCard(key, title, act, summary, detail){
@@ -2932,7 +2699,6 @@ function renderResult(){
       panes.forEach(q=>q.hidden=q.getAttribute('data-oh')!==m); }); }
   { const nt=document.getElementById('notes-toggle'); if(nt) nt.onclick=()=>{ const on=view.classList.toggle('notes-on'); nt.textContent = on?'ⓘ 참고설명 숨기기':'ⓘ 참고설명'; }; }
   if(hasProfile) loadTraitGap(p, traitS || (sajuPower ? sajuOhShare(sajuPower) : null));
-  loadMeCharPeer();
   { const tt=document.getElementById('to-trait'); if(tt) tt.onclick=()=>{ view.querySelector('.rtab[data-rtab="trait"]').click(); const c=view.querySelector('[data-sum="trait"]'); if(c){ c.open=true; c.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}); } }; }
   if(needSurvey||needUpgrade){ const b=document.getElementById('go-survey'); if(b) b.onclick=()=>{ tab='survey'; renderApp(); }; }
   { const b2=document.getElementById('go-survey2'); if(b2) b2.onclick=()=>{ tab='survey'; renderApp(); }; }
@@ -3170,18 +2936,6 @@ function renderIpcSurvey(){
     pendingResultTab='ipc'; tab='result'; renderApp();
   };
 }
-
-/* ---------- 매칭: 후보 탐색 ---------- */
-// 목적별 추천순 블렌드(보완·유사·기호 상대 비중). 기석님 결정(2026-08-17):
-//   목적 분기 O — 사용자가 목적을 직접 고르면 그 성격에 맞춰 정렬이 달라짐.
-//   연애·전체 = 균등(승인), 친목·취미 = 함께 즐길거리(기호) 강조, 비즈니스 = 보완 강조·취향 비중↓.
-const RANK_BLEND = {
-  all:      { comp:1,    sim:1, taste:1   },
-  love:     { comp:1,    sim:1, taste:1   },
-  social:   { comp:1,    sim:1, taste:1.3 },
-  hobby:    { comp:0.85, sim:1, taste:1.4 },
-  business: { comp:1.4,  sim:1, taste:0.5 },
-};
 
 boot();
 
