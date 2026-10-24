@@ -1741,6 +1741,7 @@ function renderPeer(params){
     <div style="max-width:600px;margin:0 auto">
     <h1>지인 평가 <span class="seal">緣</span></h1>
     <p class="sub"><b>${subj}</b>이 평소 어떤 사람인지, 아는 대로 답해주세요. 결과는 본인의 자기 이해에 쓰여요.</p>
+    <p class="sub" style="font-size:.82rem;margin-top:-4px">본인이 심화상담을 신청해 보내기를 고르면, 응답을 <b>평균으로 합친 요약</b>이 상담사에게 전달될 수 있어요. 응답한 분의 이름과 관계는 전달되지 않아요.</p>
     <div class="steps" style="grid-template-columns:repeat(${names.length},minmax(0,1fr))">${names.map((t,i)=>`<div class="st">${t}</div>`).join('')}</div>
     <div class="card" data-pstep="0">
       <h2><span class="seal">①</span> ${subj}과 나의 관계</h2>
