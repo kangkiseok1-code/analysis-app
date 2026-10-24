@@ -41,7 +41,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .fr-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px 0;border:none;border-top:1px solid var(--line);background:none;font:inherit;color:var(--ink);cursor:pointer}
 .fr-row:first-child{border-top:none}
 .chip-el{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:700;white-space:nowrap}
-.k-water{background:rgba(42,73,200,.12);color:var(--water)}
+.k-water{background:rgba(26,26,26,.08);color:var(--water)}
 .notes-toggle-bar{text-align:center;margin:8px 0}
 /* 요약 카드 (나 탭) — 누르면 상세가 펼쳐짐 */
 .sumcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
@@ -67,7 +67,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .tg-peer{background:var(--card);border:2.5px solid #2a7d7d;width:12px;height:12px;top:3px}
 .tg-saju{background:transparent;border:2px dashed #7b5cc4;width:12px;height:12px;top:3px}
 .tg-tag{font-size:.7rem;font-weight:700;padding:3px 6px;border-radius:10px;text-align:center;white-space:nowrap}
-.t-open{background:var(--ok-soft);color:var(--wood)}.t-blind{background:var(--danger-soft);color:var(--fire)}.t-hidden{background:var(--info-soft);color:var(--water)}.t-unk{background:var(--line);color:var(--sub)}.t-mid{background:var(--card);color:var(--muted);border:1px dashed var(--line-strong)}
+.t-open{background:var(--ok-soft);color:var(--wood)}.t-blind{background:var(--danger-soft);color:var(--fire)}.t-hidden{background:var(--info-soft);color:var(--info)}.t-unk{background:var(--line);color:var(--sub)}.t-mid{background:var(--card);color:var(--muted);border:1px dashed var(--line-strong)}
 .tg-lg{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--sub)}
 .tg-lg span{display:flex;align-items:center;gap:5px}.tg-lg .tg-dot{position:static;transform:none;display:inline-block}
 .tg-line{font-size:.9rem;margin:8px 0 0;line-height:1.55}
@@ -490,7 +490,7 @@ const LIKERT = ['전혀\n아니다','아니다','보통','그렇다','매우\n�
 
 /* ===== 오행 성향(퍼셉션 갭) — counsel-tool 이식 (Slice 1) ===== */
 const OH_KEYS  = ['목','화','토','금','수'];
-const OH_COL   = { 목:'#0e8a5f', 화:'#c8264f', 토:'#e0951b', 금:'#9aa4ae', 수:'#2a49c8' };   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
+const OH_COL   = { 목:'#0e8a5f', 화:'#c8264f', 토:'#e0951b', 금:'#9aa4ae', 수:'#1a1a1a' };   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 // 통합 성향 질문지: 각 문항 = 오행 축(oh) + Big5 요인(f). dir -1은 역채점. 앞20=간단, 전50=정밀.
 const PROFILE_Q = [
   { oh:'목', f:'C', dir: 1, q:'나는 목표가 생기면 망설이지 않고 바로 시작한다' },
@@ -818,7 +818,7 @@ function sibsinElem(dayElem, group){
   if(group==='관성') return Object.keys(KE_).find(k=>KE_[k]===dayElem);
   return GEN_BY[dayElem];
 }
-const ELEM_HEX={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#2a49c8'};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
+const ELEM_HEX={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#1a1a1a'};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 const SIBSIN_DESC={비겁:'자기 주체성·경쟁심·동료애. 주도적이고 독립적인 힘',식상:'표현·창의·생산. 아이디어를 밖으로 내놓는 힘',재성:'재물·현실 감각·성과. 목표를 손에 쥐는 힘',관성:'규율·책임·조직. 질서와 자기 통제의 힘',인성:'학습·수용·지원. 받아들이고 깊이 쌓는 힘'};
 const STAGE_COLOR={장생:'#0e8a5f',목욕:'#0e8a5f',관대:'#4a8c5e',건록:'#c99a3c',제왕:'#c75146',쇠:'#c75146',병:'#c75146',사:'#7a5ca8',묘:'#9aa4ae',절:'#9aa4ae',태:'#7a5ca8',양:'#4a8c5e'};
 function hyeongTypesFor(branchRel,myId){
@@ -1308,7 +1308,7 @@ function renderDeepHtmlFull(dp, dayElem, opts){
   return `<div class="deep-grid">
       <div class="deep-box">
         <div class="deep-label">신강 · 신약</div>
-        <div class="deep-big" style="color:${dp.status==='신강'?'var(--danger)':'var(--water)'}">${dp.gangyakLabel&&dp.gangyakLabel!==dp.gangyakGrade?dp.gangyakLabel:dp.status}</div>
+        <div class="deep-big" style="color:${dp.status==='신강'?'var(--danger)':'var(--info)'}">${dp.gangyakLabel&&dp.gangyakLabel!==dp.gangyakGrade?dp.gangyakLabel:dp.status}</div>
         <div class="deep-note">일간을 돕는 힘 ${Math.round(dp.helpRatio*100)}%${dp.monthHelps?' · 월령 득(得)':' · 월령 실(失)'}</div>
       </div>
       <div class="deep-box">
@@ -1965,7 +1965,7 @@ async function markPeerSeen(){
 }
 
 /* ---------- 사람별 오행 빛 ---------- */
-const AURA_COL={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#2a49c8'};
+const AURA_COL={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#1a1a1a'};
 const AURA_HAN={목:'木',화:'火',토:'土',금:'金',수:'水'};
 const AURA_POS=[[-22,-30],[40,-12],[6,38]];   // 상위 1·2·3 기운 원의 자리(가로 % · 세로 %) — 동그란 얼굴 자리
 const AURA_POS_WIDE=[[-6,-55],[48,-35],[22,25]];   // 넓은 배너(상대 상세·나)용 — 원을 작게, 가로로 흩어 놓음
