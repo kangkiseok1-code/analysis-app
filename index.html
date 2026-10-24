@@ -404,7 +404,7 @@ html{-webkit-tap-highlight-color:transparent}
 .lg-block ul{margin:2px 0 0 18px;padding:0;font-size:.82rem;line-height:1.5}
 .lg-block p{margin:2px 0 0;font-size:.82rem}
 .rel-none{font-size:.8rem;color:var(--muted);margin:0 0 0 2px}
-.rel-hap .rel-type{color:#2e8b57}
+.rel-hap .rel-type{color:var(--ok)}
 .rel-chung .rel-type{color:var(--danger)}
 .rel-hyeong .rel-type{color:#c99a00}
 .rel-pahae .rel-type{color:var(--sub)}
@@ -490,7 +490,7 @@ const LIKERT = ['전혀\n아니다','아니다','보통','그렇다','매우\n�
 
 /* ===== 오행 성향(퍼셉션 갭) — counsel-tool 이식 (Slice 1) ===== */
 const OH_KEYS  = ['목','화','토','금','수'];
-const OH_COL   = { 목:'#2e7d32', 화:'#c0392b', 토:'#b08d34', 금:'#6b6b6b', 수:'#1f3a5f' };
+const OH_COL   = { 목:'#0e8a5f', 화:'#c8264f', 토:'#e0951b', 금:'#9aa4ae', 수:'#2a49c8' };   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 // 통합 성향 질문지: 각 문항 = 오행 축(oh) + Big5 요인(f). dir -1은 역채점. 앞20=간단, 전50=정밀.
 const PROFILE_Q = [
   { oh:'목', f:'C', dir: 1, q:'나는 목표가 생기면 망설이지 않고 바로 시작한다' },
@@ -818,9 +818,9 @@ function sibsinElem(dayElem, group){
   if(group==='관성') return Object.keys(KE_).find(k=>KE_[k]===dayElem);
   return GEN_BY[dayElem];
 }
-const ELEM_HEX={목:'#2e8b57',화:'#d32f2f',토:'#e0a800',금:'#9e9e9e',수:'#1a1a1a'};
+const ELEM_HEX={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#2a49c8'};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 const SIBSIN_DESC={비겁:'자기 주체성·경쟁심·동료애. 주도적이고 독립적인 힘',식상:'표현·창의·생산. 아이디어를 밖으로 내놓는 힘',재성:'재물·현실 감각·성과. 목표를 손에 쥐는 힘',관성:'규율·책임·조직. 질서와 자기 통제의 힘',인성:'학습·수용·지원. 받아들이고 깊이 쌓는 힘'};
-const STAGE_COLOR={장생:'#2e8b57',목욕:'#2e8b57',관대:'#4a8c5e',건록:'#c99a3c',제왕:'#c75146',쇠:'#c75146',병:'#c75146',사:'#7a5ca8',묘:'#9e9e9e',절:'#9e9e9e',태:'#7a5ca8',양:'#4a8c5e'};
+const STAGE_COLOR={장생:'#0e8a5f',목욕:'#0e8a5f',관대:'#4a8c5e',건록:'#c99a3c',제왕:'#c75146',쇠:'#c75146',병:'#c75146',사:'#7a5ca8',묘:'#9aa4ae',절:'#9aa4ae',태:'#7a5ca8',양:'#4a8c5e'};
 function hyeongTypesFor(branchRel,myId){
   if(!branchRel)return[]; const types=[];
   branchRel.punishTrio.forEach(it=>{ if(it.ids.includes(myId))types.push(it.type); });
