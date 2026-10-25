@@ -29,6 +29,13 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .aura{position:relative;overflow:hidden;background:var(--line);isolation:isolate}
 .aura-o{position:absolute;border-radius:50%;aspect-ratio:1/1;opacity:.82}
 .aura-in{position:relative;z-index:1}
+.tc-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 10px}
+.tc-seg{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line-strong);border-radius:999px;background:var(--card)}
+.tc-seg button{min-height:34px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--sub);font-family:inherit;font-weight:600;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.tc-seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.tc-sw{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;color:var(--sub);white-space:nowrap;min-height:34px}
+.tc-cv{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.tc-btns{display:flex;gap:8px;margin:10px 0 0}.tc-btns .btn{flex:1;min-height:46px;white-space:nowrap}
 .plate{background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);border-radius:14px;padding:7px 12px;min-width:0}
 .av-ring{display:inline-flex;padding:2.5px;border-radius:50%;background:var(--rc);flex:none}
 .me-hero{display:block;width:100%;border:none;border-radius:22px;height:150px;padding:0;text-align:left;cursor:pointer;font-family:inherit}
@@ -2525,6 +2532,91 @@ function prefSummaryHtml(p){
 }
 
 
+/* ---------- 내 타입 카드 — 오행 빛 위에 타입 이름, 이미지로 저장·공유 ---------- */
+const TC_NOUN={목:'숲',화:'불꽃',토:'대지',금:'바위',수:'호수'};
+// ⚠ 아래 별명·키워드 문구는 초안 — 나승완 책 기준으로 사장님 검수 필요
+const TC_ADJ={
+  신강:{비겁:'주관이 뚜렷한',식상:'앞장서는',재성:'현실을 움직이는',관성:'책임을 짊어지는',인성:'배우며 단단해지는'},
+  신약:{비겁:'곁의 힘으로 서는',식상:'마음을 표현하며 비우는',재성:'바쁘게 챙기는',관성:'압박 속에서도 버티는',인성:'깊이 생각하는'}
+};
+const TC_KW_SS={비겁:['자기주관','독립심'],식상:['표현력','아이디어'],재성:['현실감각','실속'],관성:['책임감','원칙'],인성:['배움','신중함']};
+const TC_KW_OH={목:'성장욕구',화:'열정',토:'꾸준함',금:'단호함',수:'통찰력'};
+function typeCardData(deep, p){
+  const dist=myDist(), top=auraTop(dist); if(!top.length||!deep||!deep.sibsin) return null;
+  const sum=OH_KEYS.reduce((s,k)=>s+(+dist[k]||0),0), share={}; OH_KEYS.forEach(k=>share[k]=(+dist[k]||0)/sum);
+  const t1=top[0].k, t2=top[1]&&top[1].k, vals=OH_KEYS.map(k=>share[k]);
+  const name = Math.max(...vals)-Math.min(...vals)<.12 ? '고른 정원형'
+    : (top[0].share>=.45 && top[0].share-(top[1]?top[1].share:0)>=.25) || !t2 ? `${TC_NOUN[t1]}형`
+    : `${TC_NOUN[t1]}-${TC_NOUN[t2]}형`;
+  const ord=['비겁','식상','재성','관성','인성'].slice().sort((a,b)=>(deep.sibsin[b]||0)-(deep.sibsin[a]||0)), g=ord[0];
+  const gy=deep.status==='신약'?'신약':'신강';
+  const kicker=`${t1}${t2&&name.indexOf('-')>0?' + '+t2:''} · ${deep.status||gy} · ${g}형`;
+  let like='';
+  try{ if(Array.isArray(p.profile)&&p.profile.some(x=>x)){ const pr=scoreProfile(p.profile), m=charMatch(pr.oh, pr.oh); if(m&&m.main) like=`닮은 인물 · ${m.main.name} 〈${m.main.work}〉 ${m.main.similarity}%`; } }catch(e){}
+  return { name, kicker, line:`${TC_ADJ[gy][g]} ${TC_NOUN[t1]}`, kw:[TC_KW_OH[t1], TC_KW_SS[g][0], TC_KW_SS[g][1]], share, top, like, nick:(p.nickname||'').trim() };
+}
+function typeCardHtml(deep, p){
+  const d=typeCardData(deep, p); if(!d) return '';
+  window.__tc={ d, size:'feed', nick:false };
+  return `<div class="card tc-card"><h2><span class="seal">◆</span> 내 타입 카드</h2>
+    <div class="tc-ctl"><div class="tc-seg" role="group" aria-label="카드 크기"><button type="button" data-s="feed" aria-pressed="true">피드 4:5</button><button type="button" data-s="story" aria-pressed="false">스토리 9:16</button></div>
+      <label class="tc-sw"><input type="checkbox" id="tc-nick"> 닉네임 표시</label></div>
+    <canvas id="tc-cv" class="tc-cv" role="img" aria-label="내 타입 카드"></canvas>
+    <div class="tc-btns"><button type="button" class="btn" id="tc-save">이미지로 저장</button><button type="button" class="btn ghost" id="tc-share">공유하기</button></div>
+    <p class="sub fine" style="font-size:.78rem;margin:8px 0 0">이름·생년월일은 카드에 들어가지 않아요. 닉네임은 켤 때만 보여요.</p></div>`;
+}
+function tcWrap(ctx, text, maxW){ const out=[]; let cur=''; for(const ch of text){ if(ctx.measureText(cur+ch).width>maxW && cur){ out.push(cur.trim()); cur=ch; } else cur+=ch; } if(cur.trim()) out.push(cur.trim()); return out; }
+function tcRound(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function drawTypeCard(cv, d, size, showNick){
+  const W=1080, H=size==='story'?1920:1350, F='"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif';
+  cv.width=W; cv.height=H; const c=cv.getContext('2d');
+  c.fillStyle='#f7f6f3'; c.fillRect(0,0,W,H);
+  // 오행 빛(내 분석 맨 위 배너와 같은 모양): 겹친 원 + 이름 칩
+  const bx=60, by=60, bw=W-120, bh=size==='story'?820:520;
+  c.save(); tcRound(c,bx,by,bw,bh,56); c.clip(); c.fillStyle='#ebe8e2'; c.fillRect(bx,by,bw,bh);
+  const POS=[[-22,-30],[40,-12],[6,38]];
+  d.top.forEach((x,i)=>{ const dia=(62+x.share*90)/100*bw*(size==='story'?.9:1); c.globalAlpha=.82; c.fillStyle=AURA_COL[x.k]; c.beginPath(); c.arc(bx+POS[i][0]/100*bw+dia/2, by+POS[i][1]/100*bh+dia/2, dia/2, 0, Math.PI*2); c.fill(); });
+  c.globalAlpha=1; c.restore();
+  c.fillStyle='#121212'; c.textBaseline='alphabetic';
+  // 이름 칩
+  let fs=104; c.font=`800 ${fs}px ${F}`; while(c.measureText(d.name).width>bw-140 && fs>60){ fs-=4; c.font=`800 ${fs}px ${F}`; }
+  const nameW=c.measureText(d.name).width; c.font=`600 34px ${F}`; const kW=c.measureText(d.kicker).width;
+  const nick=showNick&&d.nick?`${d.nick}님`:''; if(nick) c.font=`700 38px ${F}`; const nW=nick?c.measureText(nick).width:0;
+  const chW=Math.max(nameW,kW,nW)+80, chH=(nick?60:0)+50+fs+34+40;
+  const cx=bx+40, cy=by+bh-40-chH;
+  c.fillStyle='rgba(255,255,255,.82)'; tcRound(c,cx,cy,chW,chH,44); c.fill();
+  let y=cy+40; c.fillStyle='#121212';
+  if(nick){ c.font=`700 38px ${F}`; y+=38; c.fillText(nick,cx+40,y); y+=22; }
+  c.font=`600 34px ${F}`; c.fillStyle='#66615a'; y+=34; c.fillText(d.kicker,cx+40,y);
+  c.font=`800 ${fs}px ${F}`; c.fillStyle='#121212'; y+=fs+8; c.fillText(d.name,cx+40,y);
+  // 한 줄 별명 · 키워드 · 오행 막대 · 닮은 인물
+  y=by+bh+84; c.font=`700 54px ${F}`; c.fillStyle='#121212';
+  tcWrap(c, d.line, W-140).slice(0,2).forEach(t=>{ c.fillText(t,70,y); y+=70; });
+  y+=6; let x=70; c.font=`700 38px ${F}`;
+  d.kw.forEach(k=>{ const t='#'+k, w=c.measureText(t).width+56; if(x+w>W-70){ x=70; y+=84; } c.fillStyle='#fff'; tcRound(c,x,y,w,64,32); c.fill(); c.strokeStyle='#d9d5cd'; c.lineWidth=2; c.stroke(); c.fillStyle='#121212'; c.fillText(t,x+28,y+44); x+=w+14; });
+  y+=64+54;
+  const barH=size==='story'?260:140, bwid=(W-140-4*20)/5;
+  OH_KEYS.forEach((k,i)=>{ const h=Math.max(10, d.share[k]/Math.max(...OH_KEYS.map(q=>d.share[q]))*barH), x0=70+i*(bwid+20); c.fillStyle=AURA_COL[k]; tcRound(c,x0,y+barH-h,bwid,h,Math.min(14,h/2)); c.fill(); c.fillStyle='#66615a'; c.font=`600 32px ${F}`; c.textAlign='center'; c.fillText(k,x0+bwid/2,y+barH+42); c.textAlign='left'; });
+  y+=barH+42+50;
+  if(d.like){ c.font=`600 34px ${F}`; const t=tcWrap(c,d.like,W-200)[0]; c.fillStyle='#fff'; tcRound(c,70,y,W-140,84,26); c.fill(); c.fillStyle='#121212'; c.fillText(t,100,y+54); }
+  c.font=`600 30px ${F}`; c.fillStyle='#8e887f'; c.fillText('자림 · 나도 해보기  '+HUB.replace('https://',''), 70, H-56);
+}
+function wireTypeCard(root){
+  const cv=root.querySelector('#tc-cv'); if(!cv||!window.__tc) return;
+  const st=window.__tc, redraw=()=>drawTypeCard(cv, st.d, st.size, st.nick);
+  redraw();
+  root.querySelectorAll('.tc-seg [data-s]').forEach(b=>b.onclick=()=>{ st.size=b.dataset.s; root.querySelectorAll('.tc-seg [data-s]').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); redraw(); });
+  root.querySelector('#tc-nick').onchange=e=>{ st.nick=e.target.checked; redraw(); };
+  const blobOf=()=>new Promise(r=>cv.toBlob(r,'image/png'));
+  const save=async()=>{ const b=await blobOf(), a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='jalim-type.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); };
+  root.querySelector('#tc-save').onclick=save;
+  root.querySelector('#tc-share').onclick=async()=>{
+    const b=await blobOf(), f=new File([b],'jalim-type.png',{type:'image/png'}), text=`내 사주 타입은 ${st.d.name}! 나도 해보기 ${HUB}`;
+    if(navigator.canShare && navigator.canShare({files:[f]})){ try{ await navigator.share({ files:[f], title:'내 타입 카드', text }); }catch(_){} return; }
+    await save();
+  };
+}
+
 /* ---------- 내 분석 결과 ---------- */
 // 나의 분석 이름 — 성향(1위 기운 낱말 + 2위 기운 꾸밈말) · 기호(애착 꾸밈말 + 라이프스타일 낱말) · 대인관계(엔진 8유형)
 const NM_NOUN={목:'개척자',화:'주인공',토:'버팀목',금:'수호자',수:'탐구자'};
@@ -2692,13 +2784,15 @@ function renderResult(){
       <button type="button" class="rtab" data-rtab="peer" role="tab">지인이 본 나</button>
     </div>`;
   const nms = myNames(p);
+  let tcHtml=''; try{ tcHtml=typeCardHtml(sajuDeep, p); }catch(e){ console.error(e); }
   view.innerHTML = meHeadHtml() + coreCardHtml() + segs
-    + `<div class="rpane" data-rtab="saju">${sajuHtml}</div>`
+    + `<div class="rpane" data-rtab="saju">${tcHtml}${sajuHtml}</div>`
     + `<div class="rpane" data-rtab="trait" hidden>${nameHeadHtml('나의 성향 이름', nms.trait)}${big5Html}</div>`
     + `<div class="rpane" data-rtab="pref" hidden>${nameHeadHtml('나의 기호 이름', nms.pref)}${prefPane}</div>`
     + `<div class="rpane" data-rtab="ipc" hidden>${nameHeadHtml('나의 대인관계 이름', nms.ipc)}${ipcPane}</div>`
     + `<div class="rpane" data-rtab="peer" hidden>${peerPane}</div>` + notesBar;
   bindMeHead(view);
+  try{ wireTypeCard(view); }catch(e){ console.error(e); }
   wireAnaTabs(view.querySelector('.rpane[data-rtab="saju"]'));
   view.querySelectorAll('[data-go-test]').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); tab=b.dataset.goTest; renderApp(); });
   view.querySelectorAll('.ipc-start').forEach(b=>b.onclick=()=>{ tab='ipcsurvey'; renderApp(); });
