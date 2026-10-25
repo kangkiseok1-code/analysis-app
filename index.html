@@ -31,6 +31,9 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .aura-in{position:relative;z-index:1}
 .me-acts{display:flex;align-items:center;gap:8px}
 .tc-share-btn{min-height:38px;padding:0 14px;border:1px solid var(--line-strong);border-radius:999px;background:var(--card);color:var(--ink);font-family:inherit;font-weight:600;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.doll-mini{margin-left:auto;width:96px;height:96px;image-rendering:pixelated;flex:none;animation:dollbob 1.2s steps(2) infinite}
+@keyframes dollbob{50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.doll-mini{animation:none}}
 .tc-cv{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .plate{background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);border-radius:14px;padding:7px 12px;min-width:0}
 .av-ring{display:inline-flex;padding:2.5px;border-radius:50%;background:var(--rc);flex:none}
@@ -1969,9 +1972,9 @@ const adminBadge=()=>(profile&&profile.is_admin)?'<span class="admin-badge">관�
 function meHeadHtml(){
   const d=myDist(), lab=auraLabel(d), nick=(profile&&profile.nickname)?esc(profile.nickname):'(닉네임 없음)';
   return `<div class="me-top"><h1 class="home-h1">내 분석</h1><div class="me-acts">${window.__tc?'<button type="button" class="tc-share-btn" id="me-share">공유하기</button>':''}<button type="button" class="icon-btn" id="me-gear" aria-label="설정" style="font-size:20px">⚙</button></div></div>
-    <div class="aura me-hero" style="height:132px;margin-bottom:12px">${auraHtml(d,'',`${profile&&profile.avatar_url?`<span class="av-ring" style="--rc:#fff">${avatarHtml(profile.avatar_url,52)}</span>`:''}<div class="plate"><div style="font-size:1.25rem;font-weight:800">${nick}${adminBadge()}</div><div style="font-weight:600;font-size:.85rem">${lab?lab+' 기운':'출생 정보를 넣으면 내 기운이 보여요'}</div></div>`,'position:absolute;inset:0;background:none', true)}</div>`;
+    <div class="aura me-hero" style="height:132px;margin-bottom:12px">${auraHtml(d,'',`${profile&&profile.avatar_url?`<span class="av-ring" style="--rc:#fff">${avatarHtml(profile.avatar_url,52)}</span>`:''}<div class="plate"><div style="font-size:1.25rem;font-weight:800">${nick}${adminBadge()}</div><div style="font-weight:600;font-size:.85rem">${lab?lab+' 기운':'출생 정보를 넣으면 내 기운이 보여요'}</div></div>${window.__tc&&window.__tc.doll?'<canvas id="me-doll" class="doll-mini" aria-hidden="true"></canvas>':''}`,'position:absolute;inset:0;background:none', true)}</div>`;
 }
-function bindMeHead(root){ const g=(root||document).querySelector('#me-gear'); if(g) g.onclick=()=>goTab('settings'); const sh=(root||document).querySelector('#me-share'); if(sh) sh.onclick=shareTypeCard; }
+function bindMeHead(root){ const g=(root||document).querySelector('#me-gear'); if(g) g.onclick=()=>goTab('settings'); const sh=(root||document).querySelector('#me-share'); if(sh) sh.onclick=shareTypeCard; const dl=(root||document).querySelector('#me-doll'); if(dl&&window.__tc&&window.__tc.doll) drawDollTo(dl, window.__tc.doll, 5); }
 // 설정 — 계정 일만 (프로필 편집 · 회원 단계 · 관리자 · 자림 계정 관리)
 function renderSettings(){
   const view=document.getElementById('view');
@@ -2563,7 +2566,76 @@ const TC_ADJ={
 };
 const TC_KW_SS={비겁:['자기주관','독립심'],식상:['표현력','아이디어'],재성:['현실감각','실속'],관성:['책임감','원칙'],인성:['배움','신중함']};
 const TC_KW_OH={목:'성장욕구',화:'열정',토:'꾸준함',금:'단호함',수:'통찰력'};
-function typeCardData(deep, p){
+/* ---------- 도트 인형 — 사주 값으로 부품을 골라 끼운다(같은 사주면 항상 같은 인형) ---------- */
+const DL_OH=['목','화','토','금','수'], DL_SS=['비겁','식상','재성','관성','인성'], DL_DESIGN=['줄무늬','점무늬','브이넥','후드'], DL_MOOD=['활짝','또렷','졸린눈'], DL_SEASON=['봄','여름','가을','겨울'];
+const DL_HAIR={목:'#2f4a38',화:'#7a2630',토:'#7d6030',금:'#8e949b',수:'#1b2536'};
+const DL_ACC={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#c8d0d8',수:'#4a6fa5'};
+const DL_SEA={봄:['#cfe8c6','#f08fa8',[4,9,14]],여름:['#f3e3a0','#e0951b',[5,12]],가을:['#e8cfa8','#c07a3a',[3,8,15]],겨울:['#e8eef5','#9bb7d4',[6,13]]};
+// o: { gi 일간(0~9), hairE, e1 옷색 오행, e2 장식 오행, strong, ss 소품 십신, design, mood, yong 용신 오행, season } — 20×20 칸 도트
+function drawDoll(c, ox, oy, scale, o){
+  const R=(x,y,w,h,col)=>{ c.fillStyle=col; c.fillRect(ox+x*scale, oy+(y+1)*scale, w*scale, h*scale); };
+  const strong=!!o.strong, dy=strong?0:1, hair=DL_HAIR[o.hairE], gi=o.gi, cl=ELEM_HEX[o.e1], SKIN='#f5d3b0', EYE='#2b2b28', PANT='#3a3a45';
+  const sea=DL_SEA[o.season]; R(2,18,16,1,sea[0]); sea[2].forEach(x=>R(x,18,1,1,sea[1]));
+  if(gi===1){ [[4,4,1,6],[3,9,1,2],[15,4,1,6],[16,9,1,2]].forEach(a=>R(a[0],a[1]+dy,a[2],a[3],hair)); }
+  if(gi===3){ R(4,4+dy,1,5,hair); R(15,4+dy,1,5,hair); }
+  if(gi===5){ R(4,2+dy,1,6,hair); R(15,2+dy,1,6,hair); }
+  if(gi===8){ R(4,3+dy,2,9,hair); R(14,3+dy,2,9,hair); }
+  if(gi===9){ R(4,dy,12,5,hair); R(3,2+dy,1,4,hair); R(16,2+dy,1,4,hair); }
+  R(6,15,2,2,PANT); R(12,15,2,2,PANT); R(5,17,3,1,DL_ACC[o.yong]); R(12,17,3,1,DL_ACC[o.yong]);
+  const bx=strong?4:5, bw=strong?12:10, top=10;
+  R(bx,top,bw,strong?5:4,cl);
+  if(o.design==='줄무늬') R(bx,top+2,bw,1,'rgba(255,255,255,.4)');
+  if(o.design==='점무늬') [[bx+2,top+1],[bx+bw-4,top+1],[bx+4,top+3],[bx+bw-6,top+3]].forEach(a=>R(a[0],a[1],1,1,'rgba(255,255,255,.55)'));
+  if(o.design==='브이넥'){ R(9,top,2,1,SKIN); R(9,top+1,2,1,SKIN); }
+  if(o.design==='후드'){ R(7,top,6,1,'rgba(0,0,0,.28)'); R(9,top+1,1,2,'#fff'); R(11,top+1,1,2,'#fff'); }
+  R(strong?3:4,top+1,1,3,SKIN); R(strong?16:15,top+1,1,3,SKIN);
+  R(8,9+dy,4,1,DL_ACC[o.yong]); R(11,10,1,2,DL_ACC[o.yong]);
+  R(5,4+dy,10,4,SKIN); R(6,8+dy,8,1,SKIN);
+  const base=()=>{ R(6,1+dy,8,1,hair); R(5,2+dy,10,2,hair); R(5,4+dy,2,3,hair); R(13,4+dy,2,3,hair); R(7,4+dy,2,1,hair); R(11,4+dy,2,1,hair); };
+  if(gi===0){ base(); R(9,dy,2,1,hair); R(9,-1+dy,2,1,hair); }
+  else if(gi===1) base();
+  else if(gi===2){ base(); R(6,dy,1,1,hair); R(9,dy,1,1,hair); R(12,dy,1,1,hair); R(7,-1+dy,1,1,hair); }
+  else if(gi===3){ R(6,1+dy,8,1,hair); R(5,2+dy,10,2,hair); R(5,4+dy,7,1,hair); R(5,5+dy,1,2,hair); R(13,4+dy,2,3,hair); }
+  else if(gi===4){ R(6,2+dy,8,1,hair); R(5,3+dy,10,1,hair); R(5,4+dy,1,2,hair); R(14,4+dy,1,2,hair); }
+  else if(gi===5){ R(4,2+dy,12,2,hair); R(5,1+dy,10,1,hair); R(5,4+dy,2,2,hair); R(13,4+dy,2,2,hair); }
+  else if(gi===6){ R(8,-1+dy,4,2,hair); R(6,1+dy,8,1,hair); R(5,2+dy,10,1,hair); R(5,3+dy,1,2,hair); R(14,3+dy,1,2,hair); }
+  else if(gi===7){ R(6,1+dy,8,1,hair); R(5,2+dy,10,2,hair); R(5,4+dy,5,1,hair); R(11,4+dy,3,1,hair); R(5,5+dy,1,2,hair); R(14,5+dy,1,2,hair); }
+  else if(gi===8){ R(6,1+dy,8,1,hair); R(5,2+dy,10,2,hair); R(5,4+dy,2,3,hair); R(13,4+dy,2,3,hair); R(7,4+dy,6,1,hair); }
+  else { R(5,dy,10,1,hair); R(4,1+dy,12,3,hair); R(5,4+dy,2,2,hair); R(13,4+dy,2,2,hair); R(7,4+dy,2,1,hair); R(11,4+dy,2,1,hair); R(6,1+dy,1,1,'rgba(255,255,255,.3)'); R(10,2+dy,1,1,'rgba(255,255,255,.3)'); }
+  const a=DL_ACC[o.e2];
+  if(o.e2==='목'){ R(13,1+dy,2,1,a); R(14,dy,1,1,a); }
+  if(o.e2==='화'){ R(13,dy,1,2,a); R(14,1+dy,1,1,'#e0951b'); }
+  if(o.e2==='토') R(12,dy,3,1,a);
+  if(o.e2==='금') R(5,3+dy,10,1,a);
+  if(o.e2==='수') R(13,1+dy,2,2,a);
+  if(o.mood==='활짝'){ R(7,6+dy,1,2,EYE); R(12,6+dy,1,2,EYE); R(9,8+dy,2,1,'#c0644f'); }
+  if(o.mood==='또렷'){ R(7,6+dy,2,2,EYE); R(11,6+dy,2,2,EYE); R(7,6+dy,1,1,'#fff'); R(11,6+dy,1,1,'#fff'); R(9,8+dy,2,1,'#a8423a'); }
+  if(o.mood==='졸린눈'){ R(7,7+dy,2,1,EYE); R(11,7+dy,2,1,EYE); R(9,8+dy,1,1,'#c0644f'); }
+  if(!strong){ R(6,8+dy,1,1,'#f2a6a0'); R(13,8+dy,1,1,'#f2a6a0'); }
+  const hx=strong?17:16;
+  if(o.ss==='비겁'){ R(hx,8,1,7,'#7a5a3a'); R(hx+1,8,2,2,'#c8264f'); }
+  if(o.ss==='식상'){ R(hx,9,2,2,'#d33'); R(hx,11,1,3,'#555'); }
+  if(o.ss==='재성'){ R(hx,11,3,1,'#7a5a3a'); R(hx,12,3,3,'#a87a46'); R(hx+1,13,1,1,'#e0c070'); }
+  if(o.ss==='관성'){ R(hx,10,3,5,'#fff'); R(hx,11,3,1,'#bbb'); R(hx,13,3,1,'#bbb'); R(hx,10,3,1,'#555'); }
+  if(o.ss==='인성'){ R(hx,10,3,5,'#3a5fa5'); R(hx+2,10,1,5,'#fff'); }
+}
+function drawDollTo(cv, o, scale){ cv.width=20*scale; cv.height=20*scale; const c=cv.getContext('2d'); c.imageSmoothingEnabled=false; drawDoll(c,0,0,scale,o); }
+function dollEncode(o){ return [o.gi, DL_OH.indexOf(o.hairE), DL_OH.indexOf(o.e1), DL_OH.indexOf(o.e2), o.strong?0:1, DL_SS.indexOf(o.ss), DL_DESIGN.indexOf(o.design), DL_MOOD.indexOf(o.mood), DL_OH.indexOf(o.yong), DL_SEASON.indexOf(o.season)]; }
+function dollDecode(a){
+  if(!Array.isArray(a)||a.length!==10) return null;
+  const n=a.map(x=>+x), ok=(v,m)=>Number.isInteger(v)&&v>=0&&v<m;
+  if(!(ok(n[0],10)&&ok(n[1],5)&&ok(n[2],5)&&ok(n[3],5)&&ok(n[4],2)&&ok(n[5],5)&&ok(n[6],4)&&ok(n[7],3)&&ok(n[8],5)&&ok(n[9],4))) return null;
+  return { gi:n[0], hairE:DL_OH[n[1]], e1:DL_OH[n[2]], e2:DL_OH[n[3]], strong:n[4]===0, ss:DL_SS[n[5]], design:DL_DESIGN[n[6]], mood:DL_MOOD[n[7]], yong:DL_OH[n[8]], season:DL_SEASON[n[9]] };
+}
+function dollOf(deep, natal, dayElem, top, ord, p){
+  const SEA=['겨울','겨울','봄','봄','봄','여름','여름','여름','가을','가을','가을','겨울'];   // 월지(자축인묘…)별 계절
+  const dy={비겁:'줄무늬',식상:'점무늬',재성:'브이넥',관성:'후드',인성:'점무늬'}[ord[1]]||'줄무늬';
+  let mood=deep.status==='신약'?'또렷':'활짝';
+  try{ if(Array.isArray(p.profile)&&p.profile.some(x=>x)){ const e=scoreProfile(p.profile).big5.pct.E; mood=e>=60?'활짝':e<=40?'졸린눈':'또렷'; } }catch(e){}
+  const yong=(deep.yongsin&&deep.yongsin[0])||top[0].k;
+  return { gi:natal.day.gan, hairE:dayElem, e1:top[0].k, e2:(top[1]||top[0]).k, strong:deep.status!=='신약', ss:ord[0], design:dy, mood, yong:DL_OH.includes(yong)?yong:top[0].k, season:SEA[natal.month.ji]||'봄' };
+}
+function typeCardData(deep, p, natal, dayElem){
   const dist=myDist(), top=auraTop(dist); if(!top.length||!deep||!deep.sibsin) return null;
   const sum=OH_KEYS.reduce((s,k)=>s+(+dist[k]||0),0), share={}; OH_KEYS.forEach(k=>share[k]=(+dist[k]||0)/sum);
   const t1=top[0].k, t2=top[1]&&top[1].k, vals=OH_KEYS.map(k=>share[k]);
@@ -2575,11 +2647,12 @@ function typeCardData(deep, p){
   const kicker=`${t1}${t2&&name.indexOf('-')>0?' + '+t2:''} · ${deep.status||gy} · ${g}형`;
   let like='';
   try{ if(Array.isArray(p.profile)&&p.profile.some(x=>x)){ const pr=scoreProfile(p.profile), m=charMatch(pr.oh, pr.oh); if(m&&m.main) like=`닮은 인물 · ${m.main.name} 〈${m.main.work}〉 ${m.main.similarity}%`; } }catch(e){}
-  return { name, kicker, line:`${TC_ADJ[gy][g]} ${TC_NOUN[t1]}`, kw:[TC_KW_OH[t1], TC_KW_SS[g][0], TC_KW_SS[g][1]], share, top, like, nick:(p.nickname||'').trim() };
+  let doll=null; try{ if(natal) doll=dollOf(deep, natal, dayElem||t1, top, ord, p); }catch(e){ console.error(e); }
+  return { name, kicker, line:`${TC_ADJ[gy][g]} ${TC_NOUN[t1]}`, kw:[TC_KW_OH[t1], TC_KW_SS[g][0], TC_KW_SS[g][1]], share, top, like, nick:(p.nickname||'').trim(), doll };
 }
 // 공유 링크 — 타입 이름·키워드·오행 비율만 담는다(생년월일·이름 없음). 주소의 # 뒤라 서버에는 전달되지 않는다
 function tcEncode(d){
-  const o={ n:d.name, k:d.kicker, l:d.line, w:d.kw, s:OH_KEYS.map(k=>Math.round(d.share[k]*100)), c:d.like||'' };
+  const o={ n:d.name, k:d.kicker, l:d.line, w:d.kw, s:OH_KEYS.map(k=>Math.round(d.share[k]*100)), c:d.like||'', dl:d.doll?dollEncode(d.doll):null };
   return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 function tcDecode(str){
@@ -2590,7 +2663,7 @@ function tcDecode(str){
     if(!o.n||!s) return null;
     const share={}; OH_KEYS.forEach((k,i)=>share[k]=s[i]/100);
     const top=OH_KEYS.map(k=>({k, share:share[k]})).filter(x=>x.share>0).sort((a,b)=>b.share-a.share).slice(0,3);
-    return { name:cut(o.n,20), kicker:cut(o.k,40), line:cut(o.l,40), kw:(Array.isArray(o.w)?o.w:[]).slice(0,3).map(x=>cut(x,12)), share, top, like:cut(o.c,80), nick:'' };
+    return { name:cut(o.n,20), kicker:cut(o.k,40), line:cut(o.l,40), kw:(Array.isArray(o.w)?o.w:[]).slice(0,3).map(x=>cut(x,12)), share, top, like:cut(o.c,80), nick:'', doll:dollDecode(o.dl) };
   }catch(e){ return null; }
 }
 function tcLink(d){ return location.origin+location.pathname+'#card?d='+tcEncode(d); }
@@ -2616,7 +2689,9 @@ function drawTypeCard(cv, d, size, showNick){
   c.save(); tcRound(c,bx,by,bw,bh,56); c.clip(); c.fillStyle='#ebe8e2'; c.fillRect(bx,by,bw,bh);
   const POS=[[-22,-30],[40,-12],[6,38]];
   d.top.forEach((x,i)=>{ const dia=(62+x.share*90)/100*bw*(size==='story'?.9:1); c.globalAlpha=.82; c.fillStyle=AURA_COL[x.k]; c.beginPath(); c.arc(bx+POS[i][0]/100*bw+dia/2, by+POS[i][1]/100*bh+dia/2, dia/2, 0, Math.PI*2); c.fill(); });
-  c.globalAlpha=1; c.restore();
+  c.globalAlpha=1;
+  if(d.doll){ const sc=size==='story'?24:20; c.imageSmoothingEnabled=false; drawDoll(c, bx+bw-20*sc-12, by+bh-20*sc-8, sc, d.doll); }
+  c.restore();
   c.fillStyle='#121212'; c.textBaseline='alphabetic';
   // 이름 칩
   let fs=104; c.font=`800 ${fs}px ${F}`; while(c.measureText(d.name).width>bw-140 && fs>60){ fs-=4; c.font=`800 ${fs}px ${F}`; }
@@ -2810,7 +2885,7 @@ function renderResult(){
       <button type="button" class="rtab" data-rtab="peer" role="tab">지인이 본 나</button>
     </div>`;
   const nms = myNames(p);
-  try{ window.__tc=typeCardData(sajuDeep, p); }catch(e){ console.error(e); }
+  try{ window.__tc=typeCardData(sajuDeep, p, natalPillars, sajuDayElem); }catch(e){ console.error(e); }
   view.innerHTML = meHeadHtml() + coreCardHtml() + segs
     + `<div class="rpane" data-rtab="saju">${sajuHtml}</div>`
     + `<div class="rpane" data-rtab="trait" hidden>${nameHeadHtml('나의 성향 이름', nms.trait)}${big5Html}</div>`
