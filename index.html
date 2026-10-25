@@ -2758,6 +2758,7 @@ function renderResult(){
   if(!E){ view.innerHTML=engineErr(); return; }
   const p=profile||{};
   window.__tc=null;   // 공유하기 버튼은 사주 계산이 끝났을 때만 나온다
+  try{ if(me) localStorage.removeItem('jalim_share_'+me.id); }catch(e){}
   if(!p.birth_y||!p.birth_mo||!p.birth_d){
     view.innerHTML=meHeadHtml()+`<div class="card"><h2><span class="seal">◆</span> 내 분석</h2>
       <div class="placeholder">먼저 <b>프로필 편집</b>에서 생년월일을 입력해주세요.<br>사주 분석에 필요해요.</div>
@@ -2885,7 +2886,8 @@ function renderResult(){
       <button type="button" class="rtab" data-rtab="peer" role="tab">지인이 본 나</button>
     </div>`;
   const nms = myNames(p);
-  try{ window.__tc=typeCardData(sajuDeep, p, natalPillars, sajuDayElem); }catch(e){ console.error(e); }
+  try{ window.__tc=typeCardData(sajuDeep, p, natalPillars, sajuDayElem);
+    if(me&&window.__tc) localStorage.setItem('jalim_share_'+me.id, JSON.stringify({ url:tcLink(window.__tc), name:window.__tc.name, at:Date.now() })); }catch(e){ console.error(e); }   // 허브 공유하기 버튼이 쓴다
   view.innerHTML = meHeadHtml() + coreCardHtml() + segs
     + `<div class="rpane" data-rtab="saju">${sajuHtml}</div>`
     + `<div class="rpane" data-rtab="trait" hidden>${nameHeadHtml('나의 성향 이름', nms.trait)}${big5Html}</div>`
