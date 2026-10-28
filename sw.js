@@ -1,5 +1,5 @@
 /* 분석 PWA 서비스 워커 — 앱 껍데기만 캐시(네트워크 우선), Supabase·CDN은 통과 */
-const CACHE = 'analysis-v12';
+const CACHE = 'analysis-v13';
 const SHELL = ['./', 'index.html', 'jalim-base.css', 'engine.browser.js', 'icon.png', 'icon-192.png', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {
