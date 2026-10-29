@@ -1363,7 +1363,7 @@ function lifeGuideHtml(dp, dayElem){
       <div class="lg-sub">전통 대응 부위(참고, 진단 아님)</div><p>${esc(L.body.join(', '))}</p></div>`; }).join('');
   return `<details class="deep-box life-guide" style="margin-top:12px"><summary>용신 생활 가이드</summary>${yong}${gi}</details>`;
 }
-// 신살 (천을귀인·양인 + 괴강·백호·홍염·암록·문창귀인·복력역마) + 일주 공망 — 도화·역마·화개는 위 십이신살 표에 있어 뺐다(10/18)
+// 신살 (천을귀인·양인 + 괴강·백호·홍염·암록·문창귀인·복력역마·삼기귀인) + 일주 공망 — 도화·역마·화개는 위 십이신살 표에 있어 뺐다(10/18)
 function sinsalHtml(natal){
   const dayGan=GAN[natal.day.gan];
   const branches=[];
@@ -1386,7 +1386,9 @@ function sinsalHtml(natal){
     if(!list.length)return '';
     const where=list.map(b=>(posMap||POS)[b.id]||b.id).join('·');
     return `<div class="sinsal-row"><span class="sinsal-name">${name}</span><span class="sinsal-where">${where}</span><span class="sinsal-desc">${desc}</span></div>`;
-  }).filter(Boolean).join('');
+  }).filter(Boolean).join('')
+    // 삼기귀인 — 천간 세 글자가 순서대로 붙고 득령·월지 충 없음일 때만 (초코서당 기준, 2026-10-29)
+    + (r.samgi||[]).map(x=>`<div class="sinsal-row"><span class="sinsal-name">${x.name}</span><span class="sinsal-where">${x.ids.map(k=>POSG[k]).join('·')}</span><span class="sinsal-desc">삼기귀인(${x.gans}) — 남다른 재능과 귀한 도움 (득령·월지 충 없음, 초코서당 기준)</span></div>`).join('');
   // 공망(일주 기준 — 일주가 속한 순에서 빠지는 두 지지). 원국 지지에 걸리면 그 기둥을 함께 표시.
   const gm=E.sinsal.findGongmang(branches,'day');
   const gmRow = gm && gm.kong
