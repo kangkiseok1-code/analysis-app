@@ -469,7 +469,8 @@ html{-webkit-tap-highlight-color:transparent}
 </head>
 <body>
 <div id="app"></div>
-<script src="/jalim-engine/v1.0.0/engine.js" integrity="sha384-7XdpymHBweGdT08+OrhD0qlQUNelsJR+Bi/bRvSnlPLH8Psj5GQxN8odmLegiQGA"></script>
+<script src="/jalim-engine/v2.0.0/engine.js" integrity="sha384-Uo0xadvnTrWkb6s/wtxYLaGpdzU/fUfJsklPVkHPKzWmNXZbC6Uy/jn4dgS/OBDw"></script>
+<script src="/jalim-engine/v2.0.0/judge-transport.js" integrity="sha384-/4TPGXa6tu9v68Dt4s/2L8yfCV+cJA5czYGBWJr0Y/BU3USEycTUdcqvPYFbZJsA"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ======================================================================
@@ -508,6 +509,10 @@ function statusEl(msg,kind){ const e=document.getElementById('status'); if(e){ e
 
 /* ==================== 사주 엔진 (engine.browser.js 재사용) ==================== */
 const E = window.OhaengEngine;
+// 사주 판정은 서버가 한다(엔진 v2). 서버에는 간지 숫자만 가고, 로그인 토큰으로 부른다. 화면을 만드는 동기 함수가 판정을 쓰면
+// E.judge.settle(...)로 필요한 항목을 먼저 한꺼번에 받아 두고 그린다.
+if (E && sb && window.OhaengJudgeTransport) E.judge.configure({ send: window.OhaengJudgeTransport.create({ url: SUPABASE_URL + '/functions/v1/saju-judge', apikey: SUPABASE_ANON,
+  getToken: async () => { try { const { data } = await sb.auth.getSession(); if (data && data.session) return data.session.access_token; } catch (e) {} return SUPABASE_ANON; } }) });
 const BIG5_LABEL = { E:'외향성', A:'친화성', C:'성실성', N:'정서성', O:'개방성' };
 const LIKERT = ['전혀\n아니다','아니다','보통','그렇다','매우\n그렇다'];
 
@@ -601,7 +606,7 @@ function sajuOhShare(power){ const o={}; const t=OH_KEYS.reduce((a,k)=>a+((power
 // 오행 세력 — 엔진 본기 세력(deepAnalyze.bongiPower, 자림 강약 모델). 상담도구 '오행 구조'와 같은 값.
 // mode: 'natal'(원국) | 'natalHC'(원국+합충: 화신 전환·충 감쇄). 합계 100(자리 배점).
 function sajuBongiPower(natal, mode){
-  const d=E.saju.deepAnalyze(natal, { mode });
+  const d=E.judge.sync.deepAnalyze(natal, { mode });
   return d.bongiPower || d.weightedPower || d.power || {};
 }
 // 매칭용 — 본기 세력(원국+합충)을 '글자 수' 단위로 환산(일간 뺀 원국 7글자 = 합계 7).
@@ -988,7 +993,7 @@ function bongiLuckPower(natal, luck){
   if(luck && luck.dw) cols.push({id:'대운', gan:luck.dw.gan, ji:luck.dw.ji});
   if(luck && luck.sw) cols.push({id:'세운', gan:luck.sw.gan, ji:luck.sw.ji});
   // 합충 규칙은 엔진 hapChungEffects 하나만 쓴다(원국 natalHC와 같은 함수 — 2026-10-11 통합, 나승완 원고 합화 조건).
-  const H=E.saju.hapChungEffects(cols);
+  const H=E.judge.sync.hapChungEffects(cols);
   const power={목:0,화:0,토:0,금:0,수:0};
   cols.forEach(c=>{
     const wg=BONGI_W.천간[c.id], wj=BONGI_W.지지[c.id];
@@ -1030,7 +1035,7 @@ function luckPaneInnerHtml(natal, dayElem, luck, year, age){
 // 원고(나승완) 운 해석 표시 — 엔진 scoreTimeline의 기반·포켓세운·4조합·전극·천충지충·월지합·형·합충 개수. 구 엔진이면 표시 없음.
 function luckRulesHtml(natal, luck){
   let s=null;
-  try{ s=E.timeline.scoreTimeline(natal, E.saju.deepAnalyze(natal), luck.dwp?{ganIdx:luck.dwp.ganIdx, jiIdx:luck.dwp.jiIdx}:null,
+  try{ s=E.judge.sync.scoreTimeline(natal, E.judge.sync.deepAnalyze(natal), luck.dwp?{ganIdx:luck.dwp.ganIdx, jiIdx:luck.dwp.jiIdx}:null,
     {ganIdx:luck.swRaw.ganIdx, jiIdx:luck.swRaw.jiIdx}); }catch(e){ return ''; }
   if(!s || !('giban' in s)) return '';
   const chip=(t,tip,tone)=>`<span class="lr-chip${tone?' lr-'+tone:''}" title="${esc(tip||'')}">${esc(t)}</span>`;
@@ -1063,7 +1068,7 @@ function ohaengCardInnerHtml(natal, dayElem, dw, birthYear){
       return `<div class="oh-pane" data-oh="luckHC" hidden>${yearSel}<div class="oh-render">${luckPaneInnerHtml(natal, dayElem, luck, defYear, defAge)}</div></div>`;
     }
     // 오각형도 강약 판정 근거(본기 세력)로 통일 — 심화분석 막대(dp.bongiPower)와 동일 엔진값이라 %가 일치한다.
-    const dpm=E.saju.deepAnalyze(natal, {mode:m});   // natal·natalHC (대운·세운 불필요)
+    const dpm=E.judge.sync.deepAnalyze(natal, {mode:m});   // natal·natalHC (대운·세운 불필요)
     const note=m==='natal'?'':hapChungNote(dpm.hapchung||[]);
     return `<div class="oh-pane" data-oh="${m}"${i===0?'':' hidden'}>${ohaengPentagonHtml(dpm.bongiPower, dayElem, note)}</div>`;
   }).join('');
@@ -1090,9 +1095,10 @@ function wireOhaeng(root){
     if(sel && render){
       let ctx; try{ ctx=JSON.parse(card.getAttribute('data-oh-ctx')); }catch(e){ ctx=null; }
       if(ctx) sel.addEventListener('change',()=>{
-        const year=+sel.value, age=year-ctx.by;
+        const year=+sel.value, age=year-ctx.by, seq=(sel._seq=(sel._seq||0)+1);
         const luck=luckForYear(ctx.natal, ctx.dw, ctx.by, year);
-        render.innerHTML=luckPaneInnerHtml(ctx.natal, ctx.de, luck, year, age);
+        E.judge.settle(()=>{ if(seq===sel._seq) render.innerHTML=luckPaneInnerHtml(ctx.natal, ctx.de, luck, year, age); }, {isolate:render})
+          .catch(()=>{ if(seq===sel._seq) render.innerHTML='<p class="sub">운 점수를 불러오지 못했어요. 잠시 뒤 다시 선택해 주세요.</p>'; });
       });
     }
   });
@@ -1219,7 +1225,13 @@ function hapChungCardInnerHtml(natal, dw, birthYear){
   </div>`;
 }
 // 합충형파해 재계산 — 모드(원국만/대운·세운 반영) + 대운·세운 표에서 선택된 세운 연도(+선택한 월운) 기준
+// 판정(합충 세력)이 서버라서, 먼저 미리 돌려 필요한 값을 받아 둔 뒤 진짜로 그린다
 function updateRelCard(root){
+  const card=(root||document).querySelector('.rel-card');
+  if(!card) return;
+  E.judge.settle(()=>updateRelCardNow(root), {isolate:card.querySelector('.rel-render')||card}).catch(()=>{});
+}
+function updateRelCardNow(root){
   const scope=root||document;
   const card=scope.querySelector('.rel-card');
   if(!card) return;
@@ -1243,7 +1255,7 @@ function updateRelCard(root){
   if(act){
     const cols=[['hour'],['day'],['month'],['year']].filter(([k])=>ctx.natal[k]).map(([k])=>({id:k, gan:ctx.natal[k].gan, ji:ctx.natal[k].ji}));
     if(luck) [['dw','대운'],['sw','세운'],['wolun','월운']].forEach(([k,id])=>{ if(luck[k]) cols.push({id, gan:luck[k].gan, ji:luck[k].ji}); });
-    let ap=[]; try{ ap=E.saju.hapChungEffects(cols).applied||[]; }catch(e){}
+    let ap=[]; try{ ap=E.judge.sync.hapChungEffects(cols).applied||[]; }catch(e){}
     act.innerHTML=`<b>작용 중인 관계</b>${ap.length?ap.map(a=>`<span>${esc(a.text)}${a.elem?` → <b class="el-${a.elem}">${a.elem}</b>`:''}</span>`).join(''):'<span>기운을 바꾸는 합·충이 없어요</span>'}`;
   }
   const cnt=card.querySelector('.rel-cnt'); if(cnt) cnt.textContent=`(${relCount(render)}개)`;
@@ -1440,7 +1452,7 @@ const SHIN_ROLES=[['yongsin','용신'],['heeshin','희신'],['gisin','기신'],[
 function anaCardHtml(natal, s, luck, p){
   if(!luck) return `<div class="card"><h2><span class="seal">◆</span> 분석</h2><p class="sub">프로필에 성별을 입력하면 합충형·신살·오행·용신 분석을 볼 수 있어요.</p></div>`;
   const dw=luck.dw, by=s.solar.y;
-  let deepHC=null; try{ const h=E.saju.deepAnalyze(natal,{mode:'natalHX'}); if(h&&h.mode==='natalHX') deepHC=h; }catch(e){}
+  let deepHC=null; try{ const h=E.judge.sync.deepAnalyze(natal,{mode:'natalHX'}); if(h&&h.mode==='natalHX') deepHC=h; }catch(e){}
   const TABS=[['hc','합충형'],['ss','신살'],['oh','오행'],['ys','용신']];
   const ys = deepHC ? `
       <div class="deep-modes">
@@ -1481,6 +1493,7 @@ function computeFromProfile(p){
   const hasHour = !p.time_unknown && p.birth_h!=null;
   const opts = { minute:p.birth_min||0, calendar:p.calendar||'solar', leap:!!p.leap, city:p.birth_city||undefined };
   const s = E.saju.computeSaju(p.birth_y, p.birth_mo, p.birth_d, hasHour?p.birth_h:'', opts);
+  s.deep = E.judge.sync.deepAnalyze(s.pillars, {mode:'natal'});   // 판정은 서버 — settle 로 미리 받아 둔 값
   return { s, natal:s.pillars, hasHour };
 }
 // 매칭용 사주 — 오행 세력(dist)을 '원국+합충'(natalHC) 본기 세력으로 반영(글자 수 환산).
@@ -1777,7 +1790,8 @@ function buildMatchProfile(p){
 }
 async function syncMatchProfile(){
   try{
-    const mp=buildMatchProfile(profile); if(!mp) return;
+    let mp=null; await E.judge.settle(()=>{ mp=buildMatchProfile(profile); });
+    if(!mp) return;
     if(JSON.stringify(mp)===JSON.stringify(profile.match_profile||null)) return;
     const { error }=await sb.from('profiles').update({ match_profile:mp }).eq('id', me.id);
     if(!error && profile) profile.match_profile=mp;
@@ -2757,7 +2771,22 @@ function sumCard(key, title, act, summary, detail){
 }
 // 막대 한 줄 (요약 카드용)
 const sumBar=(label,pct,color)=>`<div class="sum-bar"><span>${label}</span><b><i style="width:${pct}%;background:${color}"></i></b><em>${pct}</em></div>`;
+// 내 분석 화면은 사주 판정을 많이 쓴다 — 생일 정보가 바뀌었을 때 한 번만 서버에서 필요한 값을 한꺼번에 받아 두고 그린다
+let _judgeFor='', _rrSeq=0;
 function renderResult(){
+  const p=profile||{}, view=document.getElementById('view');
+  if(!E||!p.birth_y||!p.birth_mo||!p.birth_d) return renderResultNow();
+  const key=JSON.stringify([p.birth_y,p.birth_mo,p.birth_d,p.birth_h,p.birth_min,p.calendar,p.leap,p.birth_city,p.time_unknown,p.gender]);
+  if(_judgeFor===key) return renderResultNow();
+  const my=++_rrSeq; view.innerHTML=SKEL;
+  E.judge.settle(()=>{
+    const { s, natal }=computeFromProfile(p); const luck=curLuckOf(s,natal,p);
+    try{ anaCardHtml(natal,s,luck,p); }catch(e){}
+    sajuBongiPower(natal,'natal'); sajuBongiPower(natal,'natalHC');
+  }).then(()=>{ _judgeFor=key; if(my===_rrSeq) renderResultNow(); })
+    .catch(()=>{ if(my===_rrSeq) view.innerHTML='<div class="card"><b>사주 계산 서버에 연결하지 못했어요.</b><p class="sub">인터넷 연결을 확인하고 다시 시도해 주세요.</p><button class="btn" id="bRetryRes" type="button">다시 시도</button></div>'; const b=document.getElementById('bRetryRes'); if(b) b.onclick=()=>renderResult(); });
+}
+function renderResultNow(){
   const view=document.getElementById('view');
   if(!renderResult._shown){ renderResult._shown=true; view.classList.add('reveal'); setTimeout(()=>view.classList.remove('reveal'),1500); }   // 첫 공개 때만 등장 모션
   if(!E){ view.innerHTML=engineErr(); return; }
