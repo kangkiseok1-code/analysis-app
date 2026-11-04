@@ -870,8 +870,8 @@ function gzCardHtml(pos,ganIdx,jiIdx,dayGanIdx,sibsinTop,hyeongTypes,extraCls,da
   return `<div ${dataAttr||''} class="gz-card${hy?' hyeong':''}${extraCls?' '+extraCls:''}">
     <div class="pos">${pos}</div>
     <div class="sibsin-top">${top}</div>
-    <div class="gz-box${yinCls(ganIdx)}" style="background:${ELEM_HEX[ganElem]}"><span class="hanja">${GAN_HANJA[ganIdx]}</span><span class="hangul">${GAN[ganIdx]}</span></div>
-    <div class="gz-box${yinCls(jiIdx)}" style="background:${ELEM_HEX[jiElem]}"><span class="hanja">${JI_HANJA[jiIdx]}</span><span class="hangul">${JI[jiIdx]}</span></div>
+    <div class="gz-box${yinCls(ganIdx)}" style="background:${JT.oh(ganElem,'soft')};color:${JT.oh(ganElem,'ink')}"><span class="hanja">${GAN_HANJA[ganIdx]}</span><span class="hangul">${GAN[ganIdx]}</span></div>
+    <div class="gz-box${yinCls(jiIdx)}" style="background:${JT.oh(jiElem,'soft')};color:${JT.oh(jiElem,'ink')}"><span class="hanja">${JI_HANJA[jiIdx]}</span><span class="hangul">${JI[jiIdx]}</span></div>
     <div class="gz-jjg">${jjg.map((g,i)=>i===jjg.length-1?`<span class="bongi">${g}</span>`:g).join(' ')}</div>
     <div class="gz-sibsin-bottom">${sibsinBottom}</div>
     <div class="gz-stage" style="color:${STAGE_COLOR[stage]||'var(--muted)'}">${stage}</div>
