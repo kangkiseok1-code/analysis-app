@@ -198,7 +198,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .bar{display:flex;align-items:center;gap:10px;margin:8px 0}
 .bar .name{width:78px;font-size:.88rem;font-weight:600;flex-shrink:0}
 .bar .track{flex:1;height:11px;background:var(--line);border-radius:6px;overflow:hidden}
-.bar .fill{height:100%;background:var(--gold);border-radius:6px}
+.bar .fill{height:100%;background:linear-gradient(90deg,var(--wood-soft),var(--accent));border-radius:6px}
 .bar .val{width:70px;text-align:right;font-size:.82rem;color:var(--muted);flex-shrink:0}
 .el-목{color:var(--m)}.el-화{color:var(--h)}.el-토{color:var(--t)}.el-금{color:var(--g)}.el-수{color:var(--s)}
 /* 간지 카드 (원국) */
@@ -848,7 +848,7 @@ function sibsinElem(dayElem, group){
   if(group==='관성') return Object.keys(KE_).find(k=>KE_[k]===dayElem);
   return GEN_BY[dayElem];
 }
-const ELEM_HEX={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#1a1a1a'};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
+const ELEM_HEX={목:JT.oh('목'),화:JT.oh('화'),토:JT.oh('토'),금:JT.oh('금'),수:JT.oh('수')};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 const SIBSIN_DESC={비겁:'자기 주체성·경쟁심·동료애. 주도적이고 독립적인 힘',식상:'표현·창의·생산. 아이디어를 밖으로 내놓는 힘',재성:'재물·현실 감각·성과. 목표를 손에 쥐는 힘',관성:'규율·책임·조직. 질서와 자기 통제의 힘',인성:'학습·수용·지원. 받아들이고 깊이 쌓는 힘'};
 const STAGE_COLOR={장생:JT.c('--wood'),목욕:JT.c('--wood'),관대:JT.c('--chart-moss'),건록:JT.c('--chart-sand'),제왕:JT.c('--chart-brick'),쇠:JT.c('--chart-brick'),병:JT.c('--chart-brick'),사:JT.c('--chart-plum'),묘:JT.c('--metal'),절:JT.c('--metal'),태:JT.c('--chart-plum'),양:JT.c('--chart-moss')};
 function hyeongTypesFor(branchRel,myId){
@@ -936,7 +936,7 @@ const OH_BASIC_FULL = {
 // 오행 기본 설명 (기본 접힘, 눌러야 펼쳐짐)
 function ohBasicsHtml(){
   return `<details class="oh-basics"><summary>ⓘ 오행 기본 설명</summary>
-    <div>${OH_KEYS.map(k=>`<div class="ob-row"><span class="gd-k" style="background:${OH_COL[k]}">${k}</span>
+    <div>${OH_KEYS.map(k=>`<div class="ob-row"><span class="gd-k" style="${JT.face(k)}">${k}</span>
       <div><b>${OH_BASIC_FULL[k][0]}</b> · ${OH_BASIC_FULL[k][1]}<br><span>${OH_BASIC_FULL[k][2]}</span></div></div>`).join('')}</div>
     <p class="ob-cycle"><b>상생</b>(서로 살림) 목→화→토→금→수→목<br><b>상극</b>(서로 누름) 목→토→수→화→금→목</p>
     <p class="ob-cycle">성향 문항에서는 목=추진력 · 화=표현력 · 토=포용력 · 금=원칙성 · 수=통찰력으로 읽어요.</p>
@@ -1350,7 +1350,7 @@ function renderDeepHtmlFull(dp, dayElem, opts){
       </div>
       <div class="deep-box">
         <div class="deep-label">${dp.manualYongsin?'용신 (상담사 확정)':'용신 (자동 추정)'}</div>
-        <div class="deep-big">${dp.yongsin.map(e=>`<span class="yong-chip" style="background:${ELEM_HEX[e]}">${e}</span><span class="yong-sg">${elemGroup(dayElem,e)}</span>`).join(' ')}</div>
+        <div class="deep-big">${dp.yongsin.map(e=>`<span class="yong-chip" style="${JT.face(e)}">${e}</span><span class="yong-sg">${elemGroup(dayElem,e)}</span>`).join(' ')}</div>
         <div class="deep-five">${SHIN_ROLES.slice(1).map(([k,n])=>`<span>${n} ${(dp[k]||[]).length?dp[k].map(e=>`<b class="el-${e}">${e}</b><small>${elemGroup(dayElem,e)}</small>`).join('·'):'—'}</span>`).join('')}</div>
         <div class="deep-note">${dp.manualYongsin?`${dp.autoYongsin.join('·')} — ${dp.autoReason}`:dp.reason}</div>${cmpNote}
         ${(opts&&opts.editYongsin)?yongsinEditorHtml(dp):''}
@@ -2772,7 +2772,7 @@ function sumCard(key, title, act, summary, detail){
   return `<details class="sumcard" data-sum="${key}"><summary><div class="sum-head"><b>${title}</b>${act||''}</div>${summary}<span class="sum-more"><span class="c">자세히 ›</span><span class="o">접기</span></span></summary><div class="sum-detail">${detail}</div></details>`;
 }
 // 막대 한 줄 (요약 카드용)
-const sumBar=(label,pct,color)=>`<div class="sum-bar"><span>${label}</span><b><i style="width:${pct}%;background:${color}"></i></b><em>${pct}</em></div>`;
+const sumBar=(label,pct,color)=>`<div class="sum-bar"><span>${label}</span><b><i style="width:${pct}%;background:${JT.soft(color)}"></i></b><em>${pct}</em></div>`;
 // 내 분석 화면은 사주 판정을 많이 쓴다 — 생일 정보가 바뀌었을 때 한 번만 서버에서 필요한 값을 한꺼번에 받아 두고 그린다
 let _judgeFor='', _rrSeq=0;
 function renderResult(){
