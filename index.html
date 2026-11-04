@@ -127,7 +127,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .ipc-empty p{margin:0 0 8px}
 .ipc-pick{margin-bottom:8px}
 .ipc-mode.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.ipc-gap{font-size:.85rem;margin:10px 0 4px;padding:8px 12px;border-radius:10px;background:#eef6f5;color:#1f5f5f}
+.ipc-gap{font-size:.85rem;margin:10px 0 4px;padding:8px 12px;border-radius:10px;background:var(--peer-tint);color:var(--peer-ink)}
 .ipc-note{font-size:.75rem;color:var(--muted);margin:6px 0 0}
 .ipc-help{font-size:.78rem;color:var(--muted);margin-top:8px}
 .ipc-help summary{cursor:pointer}
@@ -376,8 +376,8 @@ html{-webkit-tap-highlight-color:transparent}
 @media(max-width:560px){.rel-cols{gap:8px}.rel-list{gap:4px}.rel-row{gap:4px;padding:3px 7px;border-radius:6px}.rel-type{font-size:.68rem}.rel-chars{font-size:.82rem;letter-spacing:.5px}.rel-where{font-size:.64rem}.rel-elem{font-size:.7rem}.rel-note{font-size:.6rem}.rel-gh{font-size:.66rem;letter-spacing:1px}}
 .ohaeng-pent{display:flex;justify-content:center}
 .ohaeng-pent svg{width:100%;max-width:320px;height:auto}
-.og-sheng{stroke:#e6cccc;stroke-width:1.6}
-.og-ke{stroke:#c4d4e6;stroke-width:1.6}
+.og-sheng{stroke:var(--sheng-line);stroke-width:1.6}
+.og-ke{stroke:var(--ke-line);stroke-width:1.6}
 .og-name{fill:#fff;font-size:16px;font-weight:700;text-anchor:middle}
 .og-val{fill:#fff;font-size:14px;text-anchor:middle;opacity:.95}
 .og-sg{fill:#fff;font-size:10.5px;font-weight:600;text-anchor:middle;opacity:.9}
@@ -414,7 +414,7 @@ html{-webkit-tap-highlight-color:transparent}
 .rel-none{font-size:.8rem;color:var(--muted);margin:0 0 0 2px}
 .rel-hap .rel-type{color:var(--ok)}
 .rel-chung .rel-type{color:var(--danger)}
-.rel-hyeong .rel-type{color:#c99a00}
+.rel-hyeong .rel-type{color:var(--chart-sand)}
 .rel-pahae .rel-type{color:var(--sub)}
 .gz-box.rm-hap{outline:2.5px solid var(--gold);outline-offset:2px}
 .gz-box.rm-chung{outline:2.5px solid var(--danger);outline-offset:2px}
@@ -462,13 +462,14 @@ html{-webkit-tap-highlight-color:transparent}
 .rel-num{min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;line-height:18px;text-align:center}
 .pg-badge,.ohaeng-card .ohaeng-modes,.johari .ohaeng-modes{width:100%;max-width:360px;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .card.rel-card{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.card.rel-card h2{border-color:#3a3530}
-.card.rel-card .sub{color:#bdb4a5}
+.card.rel-card h2{border-color:var(--ink-line)}
+.card.rel-card .sub{color:var(--ink-sub)}
 .card.rel-card .sub b{color:#fff}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<script src="jalim-tokens.js"></script>
 <script src="/jalim-engine/v2.0.0/engine.js" integrity="sha384-PzNhH1wD/LqWVA4sCCdswam3Jerf5VXhI+ayiF/lhkcIVv8OKbvRnrmQcIP81Ub8"></script>
 <script src="/jalim-engine/v2.0.0/judge-transport.js" integrity="sha384-/4TPGXa6tu9v68Dt4s/2L8yfCV+cJA5czYGBWJr0Y/BU3USEycTUdcqvPYFbZJsA"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -519,7 +520,7 @@ const LIKERT = ['전혀\n아니다','아니다','보통','그렇다','매우\n�
 
 /* ===== 오행 성향(퍼셉션 갭) — counsel-tool 이식 (Slice 1) ===== */
 const OH_KEYS  = ['목','화','토','금','수'];
-const OH_COL   = { 목:'#0e8a5f', 화:'#c8264f', 토:'#e0951b', 금:'#9aa4ae', 수:'#1a1a1a' };   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
+const OH_COL   = { 목:JT.oh('목'), 화:JT.oh('화'), 토:JT.oh('토'), 금:JT.oh('금'), 수:JT.oh('수') };   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 // 통합 성향 질문지: 각 문항 = 오행 축(oh) + Big5 요인(f). dir -1은 역채점. 앞20=간단, 전50=정밀.
 const PROFILE_Q = [
   { oh:'목', f:'C', dir: 1, q:'나는 목표가 생기면 망설이지 않고 바로 시작한다' },
@@ -631,7 +632,7 @@ function sipsinPsychHtml(deep, dayElem, dayGanIdx){
   if(!deep || !deep.sibsin) return '';
   const order=['비겁','식상','재성','관성','인성'];
   const total=order.reduce((a,k)=>a+(deep.sibsin[k]||0),0)||1;
-  const col=k=>ELEM_HEX[sibsinElem(dayElem,k)]||'#999';
+  const col=k=>ELEM_HEX[sibsinElem(dayElem,k)]||JT.c('--muted');
   const rows=order.slice().sort((a,b)=>(deep.sibsin[b]||0)-(deep.sibsin[a]||0)).map(k=>{
     const v=deep.sibsin[k]||0, pct=Math.round(v/total*100), off=v===0;
     return `<div class="ss-item${off?' off':''}">
@@ -849,7 +850,7 @@ function sibsinElem(dayElem, group){
 }
 const ELEM_HEX={목:'#0e8a5f',화:'#c8264f',토:'#e0951b',금:'#9aa4ae',수:'#1a1a1a'};   // 허브 공통 오행색(jalim-base.css --wood·--fire·--earth·--metal·--water)과 같은 값
 const SIBSIN_DESC={비겁:'자기 주체성·경쟁심·동료애. 주도적이고 독립적인 힘',식상:'표현·창의·생산. 아이디어를 밖으로 내놓는 힘',재성:'재물·현실 감각·성과. 목표를 손에 쥐는 힘',관성:'규율·책임·조직. 질서와 자기 통제의 힘',인성:'학습·수용·지원. 받아들이고 깊이 쌓는 힘'};
-const STAGE_COLOR={장생:'#0e8a5f',목욕:'#0e8a5f',관대:'#4a8c5e',건록:'#c99a3c',제왕:'#c75146',쇠:'#c75146',병:'#c75146',사:'#7a5ca8',묘:'#9aa4ae',절:'#9aa4ae',태:'#7a5ca8',양:'#4a8c5e'};
+const STAGE_COLOR={장생:JT.c('--wood'),목욕:JT.c('--wood'),관대:JT.c('--chart-moss'),건록:JT.c('--chart-sand'),제왕:JT.c('--chart-brick'),쇠:JT.c('--chart-brick'),병:JT.c('--chart-brick'),사:JT.c('--chart-plum'),묘:JT.c('--metal'),절:JT.c('--metal'),태:JT.c('--chart-plum'),양:JT.c('--chart-moss')};
 function hyeongTypesFor(branchRel,myId){
   if(!branchRel)return[]; const types=[];
   branchRel.punishTrio.forEach(it=>{ if(it.ids.includes(myId))types.push(it.type); });
@@ -1293,7 +1294,7 @@ function wireRelCard(root){
 function quantDashboardHtml(dp, natal){
   if(!dp || dp.gangyakScore==null) return '';  // 구 엔진 하위호환: 신규 필드 없으면 생략
   const clamp=v=>Math.max(0,Math.min(100,v));
-  const RAMP3=['#f3ecd9','#e2cf9c','#cbab5f'];
+  const RAMP3=[JT.c('--ramp-1'),JT.c('--ramp-2'),JT.c('--ramp-3')];
   const spec=(label,valText,pct,zones,activeIdx)=>{
     const segs=zones.map(z=>`<div class="qd-seg" style="width:${z.w}%;background:${z.c}"></div>`).join('');
     const labs=zones.map((z,i)=>`<div class="qd-zone${i===activeIdx?' on':''}" style="width:${z.w}%">${z.name}</div>`).join('');
@@ -1336,7 +1337,7 @@ function quantDashboardHtml(dp, natal){
 function renderDeepHtmlFull(dp, dayElem, opts){
   if(!dp)return '<p class="sub">심화 분석에는 일간 정보가 필요합니다.</p>';
   const sibsinMax=Math.max(...Object.values(dp.sibsin),1);
-  const sColor=k=>ELEM_HEX[sibsinElem(dayElem,k)]||'#999';
+  const sColor=k=>ELEM_HEX[sibsinElem(dayElem,k)]||JT.c('--muted');
   // 합충형 모드에서 원국 용신을 비교용으로 병기 (다를 때만)
   const cmp=opts&&opts.compareYongsin;
   const cmpNote=(cmp && cmp.join('·')!==dp.yongsin.join('·'))
@@ -2081,7 +2082,7 @@ function renderProfile(){
         ${avatarHtml(p.avatar_url, 72)}
         <div>
           <button class="btn ghost sm" type="button" id="av-pick">${p.avatar_url?'사진 변경':'사진 등록'}</button>
-          ${p.avatar_url?'<button class="btn ghost sm" type="button" id="av-del" style="color:var(--danger);border-color:#e6c9c4">삭제</button>':''}
+          ${p.avatar_url?'<button class="btn ghost sm" type="button" id="av-del" style="color:var(--danger);border-color:var(--danger-line)">삭제</button>':''}
           <input type="file" id="av-file" accept="image/*" style="display:none">
           <div class="sub" style="font-size:.78rem;margin-top:6px">본인 얼굴이 잘 나온 사진을 권장해요.</div>
         </div>
@@ -2530,8 +2531,8 @@ function prefRadarSvg(a, b){
     h+=`<line x1="${C[0]}" y1="${C[1]}" x2="${ex}" y2="${ey}" stroke="var(--line)"/>`;
     h+=`<text x="${lx}" y="${(+ly+4).toFixed(1)}" text-anchor="middle" font-size="11.5" fill="${dim?'var(--muted)':'var(--sub)'}">${x.label}</text>`; });
   const poly=(s,col,op)=>`<polygon points="${s.map((x,i)=>P(i,x.v).join(',')).join(' ')}" fill="${col}" fill-opacity="${op}" stroke="${col}" stroke-width="1.6"/>`;
-  if(b) h+=poly(b,'#2a7d7d',.12);
-  h+=poly(a,'#b08d34',.2);
+  if(b) h+=poly(b,JT.c('--peer'),.12);
+  h+=poly(a,JT.c('--gold-line'),.2);
   return `<svg class="pref-radar" viewBox="0 0 240 236" role="img" aria-label="기호 그래프">${h}</svg>`;
 }
 // 그래프 3개 묶음. b = 상대 prefs(없으면 내 것만). 답이 전혀 없는 그래프는 뺀다
@@ -2722,7 +2723,7 @@ function drawTypeCard(cv, d, size, showNick){
   c.fillStyle='rgba(255,255,255,.82)'; tcRound(c,cx,cy,chW,chH,44); c.fill();
   let y=cy+40; c.fillStyle='#121212';
   if(nick){ c.font=`700 38px ${F}`; y+=38; c.fillText(nick,cx+40,y); y+=22; }
-  c.font=`600 34px ${F}`; c.fillStyle='#66615a'; y+=34; c.fillText(d.kicker,cx+40,y);
+  c.font=`600 34px ${F}`; c.fillStyle=JT.c('--sub'); y+=34; c.fillText(d.kicker,cx+40,y);
   c.font=`800 ${fs}px ${F}`; c.fillStyle='#121212'; y+=fs+8; c.fillText(d.name,cx+40,y);
   // 한 줄 별명 · 키워드 · 오행 막대 · 닮은 인물
   y=by+bh+84; c.font=`700 54px ${F}`; c.fillStyle='#121212';
@@ -2731,7 +2732,7 @@ function drawTypeCard(cv, d, size, showNick){
   d.kw.forEach(k=>{ const t='#'+k, w=c.measureText(t).width+56; if(x+w>W-70){ x=70; y+=84; } c.fillStyle='#fff'; tcRound(c,x,y,w,64,32); c.fill(); c.strokeStyle='#d9d5cd'; c.lineWidth=2; c.stroke(); c.fillStyle='#121212'; c.fillText(t,x+28,y+44); x+=w+14; });
   y+=64+54;
   const barH=size==='story'?260:140, bwid=(W-140-4*20)/5;
-  OH_KEYS.forEach((k,i)=>{ const h=Math.max(10, d.share[k]/Math.max(...OH_KEYS.map(q=>d.share[q]))*barH), x0=70+i*(bwid+20); c.fillStyle=AURA_COL[k]; tcRound(c,x0,y+barH-h,bwid,h,Math.min(14,h/2)); c.fill(); c.fillStyle='#66615a'; c.font=`600 32px ${F}`; c.textAlign='center'; c.fillText(k,x0+bwid/2,y+barH+42); c.textAlign='left'; });
+  OH_KEYS.forEach((k,i)=>{ const h=Math.max(10, d.share[k]/Math.max(...OH_KEYS.map(q=>d.share[q]))*barH), x0=70+i*(bwid+20); c.fillStyle=AURA_COL[k]; tcRound(c,x0,y+barH-h,bwid,h,Math.min(14,h/2)); c.fill(); c.fillStyle=JT.c('--sub'); c.font=`600 32px ${F}`; c.textAlign='center'; c.fillText(k,x0+bwid/2,y+barH+42); c.textAlign='left'; });
   y+=barH+42+50;
   if(d.like){ c.font=`600 34px ${F}`; const t=tcWrap(c,d.like,W-200)[0]; c.fillStyle='#fff'; tcRound(c,70,y,W-140,84,26); c.fill(); c.fillStyle='#121212'; c.fillText(t,100,y+54); }
   c.font=`600 30px ${F}`; c.fillStyle='#8e887f'; c.fillText('자림 · 나도 해보기  '+HUB.replace('https://',''), 70, H-56);
@@ -2838,7 +2839,7 @@ function renderResultNow(){
     const sajuN = shareOf('natal'), sajuH = shareOf('natalHC');
     let ohSection;
     if(sajuN && sajuH){
-      const modes=[['natal','원국','#8a8a8a',sajuN],['natalHC','원국+합충','#7b5cc4',sajuH]];
+      const modes=[['natal','원국',JT.c('--muted'),sajuN],['natalHC','원국+합충',JT.c('--purple'),sajuH]];
       const defIdx=1;   // 기본 = 원국+합충 (매칭 기준과 동일)
       const modeBtns=modes.map(([m,label],i)=>`<button class="btn ghost sm oh-mode${i===defIdx?' active':''}" data-oh="${m}">${label}</button>`).join('');
       const modePanes=modes.map(([m,label,col,vec],i)=>{ const mt=ohaengMatch(prof.oh,vec), gap=(mt.per[mt.upTop].diff>=8||mt.per[mt.downTop].diff<=-8)
@@ -2858,7 +2859,7 @@ function renderResultNow(){
     let sipRows='';
     if(sajuDeep && sajuDeep.sibsin){ const ord=['비겁','식상','재성','관성','인성'], tot=ord.reduce((a,k)=>a+(sajuDeep.sibsin[k]||0),0)||1;
       sipRows=ord.slice().sort((a,b)=>(sajuDeep.sibsin[b]||0)-(sajuDeep.sibsin[a]||0)).slice(0,2)
-        .map(k=>sumBar(k, Math.round((sajuDeep.sibsin[k]||0)/tot*100), ELEM_HEX[sibsinElem(sajuDayElem,k)]||'#999')).join(''); }
+        .map(k=>sumBar(k, Math.round((sajuDeep.sibsin[k]||0)/tot*100), ELEM_HEX[sibsinElem(sajuDayElem,k)]||JT.c('--muted'))).join(''); }
     const b5Rows=['E','A','C','N','O'].slice().sort((a,b)=>prof.big5.pct[b]-prof.big5.pct[a]).slice(0,2).map(k=>sumBar(BIG5_LABEL[k], prof.big5.pct[k], 'var(--ink)')).join('');
     traitS = sajuH;
     big5Html = sumCard('trait','다섯 성향 · 나와 남의 차이', again,
@@ -2972,7 +2973,7 @@ function traitRadarSvg(A, O, S){
     return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)"/><text x="${lx}" y="${+ly-1}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">${OH_TRAIT[k][2]}</text><text x="${lx}" y="${+ly+13}" text-anchor="middle" font-size="11" font-weight="700" fill="${OH_COL[k]}">${AURA_HAN[k]}</text>`; }).join('');
   const poly=(v,st)=>`<polygon points="${OH_KEYS.map((k,i)=>P(i,R*Math.max(v[k],.04)).join(',')).join(' ')}" ${st}/>`;
   if(s) g+=poly(s,'fill="none" stroke="#7b5cc4" stroke-width="1.6" stroke-dasharray="4 3"');
-  if(o) g+=poly(o,'fill="#2a7d7d" fill-opacity=".14" stroke="#2a7d7d" stroke-width="1.8"');
+  if(o) g+=poly(o,'fill="var(--peer)" fill-opacity=".14" stroke="var(--peer)" stroke-width="1.8"');
   g+=poly(a,'fill="var(--ink)" fill-opacity=".1" stroke="var(--ink)" stroke-width="2"');
   return `<svg class="tg-radar" viewBox="0 0 260 236" role="img" aria-label="다섯 성향 오각형">${g}</svg>`;
 }
