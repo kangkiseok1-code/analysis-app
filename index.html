@@ -472,6 +472,7 @@ html{-webkit-tap-highlight-color:transparent}
 <script src="/jalim-engine/v2.0.0/engine.js" integrity="sha384-PzNhH1wD/LqWVA4sCCdswam3Jerf5VXhI+ayiF/lhkcIVv8OKbvRnrmQcIP81Ub8"></script>
 <script src="/jalim-engine/v2.0.0/judge-transport.js" integrity="sha384-/4TPGXa6tu9v68Dt4s/2L8yfCV+cJA5czYGBWJr0Y/BU3USEycTUdcqvPYFbZJsA"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="checkin-cards.js"></script>
 <script>
 /* ======================================================================
    설정 — 새 Supabase 프로젝트를 만든 뒤 아래 두 값을 교체하세요.
@@ -2821,7 +2822,7 @@ function renderResultNow(){
         ${luck?`<p class="sub" style="font-size:.84rem;margin-top:2px">${curLuckNote(luck)}</p>`:`<p class="sub fine" style="font-size:.8rem;margin-top:2px">프로필에 성별을 입력하면 현재 대운·세운도 함께 보여드려요</p>`}
         <p class="sub fine" style="font-size:.8rem">카드: 십신(위) · 간지(오행색) · 지장간(본기 밑줄) · 하부 십신 · 12운성</p>
       </div>
-      ${anaCardHtml(natal, s, luck, p)}`;
+      ${anaCardHtml(natal, s, luck, p)}${ckSlotHtml()}`;
   }catch(err){ console.error(err); sajuHtml=`<div class="card"><p class="status err">사주 계산 오류: ${esc(err.message)}</p></div>`; }
 
   // 성향 — 통합 프로필(오행+Big5) 우선, 구버전 Big5-only는 재검사 유도
@@ -2930,6 +2931,7 @@ function renderResultNow(){
     + `<div class="rpane" data-rtab="peer" hidden>${peerPane}</div>` + notesBar;
   bindMeHead(view);
   wireAnaTabs(view.querySelector('.rpane[data-rtab="saju"]'));
+  loadCkCards();
   view.querySelectorAll('[data-go-test]').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); tab=b.dataset.goTest; renderApp(); });
   view.querySelectorAll('.ipc-start').forEach(b=>b.onclick=()=>{ tab='ipcsurvey'; renderApp(); });
   loadIpcPeers(p);
