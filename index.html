@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#f7f6f3">
+<meta name="theme-color" content="#fbf7ef">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="분석">
@@ -47,7 +47,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .fr-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px 0;border:none;border-top:1px solid var(--line);background:none;font:inherit;color:var(--ink);cursor:pointer}
 .fr-row:first-child{border-top:none}
 .chip-el{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:700;white-space:nowrap}
-.k-water{background:rgba(26,26,26,.08);color:var(--water)}
+.k-water{background:var(--water-soft);color:var(--water-ink)}
 .notes-toggle-bar{text-align:center;margin:8px 0}
 /* 요약 카드 (나 탭) — 누르면 상세가 펼쳐짐 */
 .sumcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
@@ -70,15 +70,15 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .tg-tr:after{content:'';position:absolute;left:50%;top:3px;width:1px;height:12px;background:var(--line-strong)}   /* 가운데 = 각자의 평균 */
 .tg-dot{position:absolute;top:2px;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);box-sizing:border-box}
 .tg-me{background:var(--ink);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
-.tg-peer{background:var(--card);border:2.5px solid #2a7d7d;width:12px;height:12px;top:3px}
-.tg-saju{background:transparent;border:2px dashed #7b5cc4;width:12px;height:12px;top:3px}
+.tg-peer{background:var(--card);border:2.5px solid var(--peer);width:12px;height:12px;top:3px}
+.tg-saju{background:transparent;border:2px dashed var(--purple);width:12px;height:12px;top:3px}
 .tg-tag{font-size:.7rem;font-weight:700;padding:3px 6px;border-radius:10px;text-align:center;white-space:nowrap}
 .t-open{background:var(--ok-soft);color:var(--wood)}.t-blind{background:var(--danger-soft);color:var(--fire)}.t-hidden{background:var(--info-soft);color:var(--info)}.t-unk{background:var(--line);color:var(--sub)}.t-mid{background:var(--card);color:var(--muted);border:1px dashed var(--line-strong)}
 .tg-lg{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:.75rem;color:var(--sub)}
 .tg-lg span{display:flex;align-items:center;gap:5px}.tg-lg .tg-dot{position:static;transform:none;display:inline-block}
 .tg-line{font-size:.9rem;margin:8px 0 0;line-height:1.55}
 .tg-radar{display:block;width:100%;max-width:280px;margin:0 auto}
-.tg-sw{display:inline-block;width:14px;height:3px;border-radius:2px}.tg-sw-dash{background:none;border-top:2px dashed #7b5cc4;height:0}
+.tg-sw{display:inline-block;width:14px;height:3px;border-radius:2px}.tg-sw-dash{background:none;border-top:2px dashed var(--purple);height:0}
 .nm-head{padding:2px 2px 4px}.nm-head .sub{font-size:.8rem;margin:0}.nm-name{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin:2px 0}
 .badge{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:10px;background:var(--gold-soft);color:var(--gold);margin-left:6px}
 /* 2단계 회원 */
@@ -709,7 +709,7 @@ function reflectHtml(k, d){
 function gapDetailHtml(A, O, b5cmp, S){
   const pair=(a,o)=>`<div class="gd-bars">
       <div><span class="gd-who">자기</span><span class="gd-track"><i style="width:${a}%;background:var(--ink)"></i></span><b>${a}</b></div>
-      <div><span class="gd-who">지인</span><span class="gd-track"><i style="width:${o}%;background:#2a7d7d"></i></span><b>${o}</b></div></div>`;
+      <div><span class="gd-who">지인</span><span class="gd-track"><i style="width:${o}%;background:var(--peer)"></i></span><b>${o}</b></div></div>`;
   const oh=OH_KEYS.map(k=>({k,a:A[k]||0,o:O[k]||0,d:(A[k]||0)-(O[k]||0)}));
   // 성향 칩 — 오각형 라벨과 같은 역할(누르면 그 성향 설명). 차이 크기를 함께 표시
   const chips=oh.map(x=>{ const [,lvC]=gapLevel(x.d);
@@ -2545,7 +2545,7 @@ function prefRadarsHtml(a, b){
   add('애착', attachScores(a), b&&attachScores(b));
   if(!blocks.length) return '';
   return `<div class="pref-radars">${blocks.join('')}</div>
-    <div class="pref-radar-legend"><span><i style="background:#b08d34"></i>나</span>${b?'<span><i style="background:#2a7d7d"></i>상대</span>':''}</div>
+    <div class="pref-radar-legend"><span><i style="background:var(--gold-line)"></i>나</span>${b?'<span><i style="background:var(--peer)"></i>상대</span>':''}</div>
     <p class="sub" style="font-size:.78rem;margin:6px 0 0">기호 문항을 묶어 만든 참고 지표예요(검증된 심리검사 아님). 중심에서 멀수록 그 성향이 강해요.</p>`;
 }
 
@@ -2844,7 +2844,7 @@ function renderResultNow(){
       const modePanes=modes.map(([m,label,col,vec],i)=>{ const mt=ohaengMatch(prof.oh,vec), gap=(mt.per[mt.upTop].diff>=8||mt.per[mt.downTop].diff<=-8)
         ? ` · 설문에서 더 드러남 <b style="color:${OH_COL[mt.upTop]}">${mt.upTop}</b> · 사주에 더 강함 <b style="color:${OH_COL[mt.downTop]}">${mt.downTop}</b>` : '';
         return `<p class="oh-pane oh-line" data-oh="${m}"${i===defIdx?'':' hidden'}>사주 일치도 <b class="oh-pct">${mt.pct}%</b>${gap}</p>`; }).join('');
-      const cmp3=`<div class="oh-cmp3"><span></span><b style="color:var(--ink)">설문</b><b style="color:#8a8a8a">원국</b><b style="color:#7b5cc4">합충</b>`
+      const cmp3=`<div class="oh-cmp3"><span></span><b style="color:var(--ink)">설문</b><b style="color:#8a8a8a">원국</b><b style="color:var(--purple)">합충</b>`
         + OH_KEYS.map(k=>`<span style="color:${OH_COL[k]};font-weight:700">${k}</span><i>${prof.oh[k]}</i><i>${sajuN[k]}%</i><i>${sajuH[k]}%</i>`).join('')+`</div>`;
       ohSection=`<div class="oh-box"><div class="oh-head"><b>사주와 비교</b><div class="ohaeng-modes" style="margin:0">${modeBtns}</div></div>
         ${modePanes}
@@ -2991,7 +2991,7 @@ function traitLine(A, O, S){
 }
 function traitSumHtml(A, O, S){
   const line=traitLine(A, O, S);
-  return `${traitRadarSvg(A, O, S)}<div class="tg-lg" style="justify-content:center"><span><i class="tg-sw" style="background:var(--ink)"></i>내가 본 나</span>${O?'<span><i class="tg-sw" style="background:#2a7d7d"></i>지인이 본 나</span>':''}${S?'<span><i class="tg-sw tg-sw-dash"></i>사주</span>':''}</div>${line?`<p class="tg-line">${line}</p>`:''}`;
+  return `${traitRadarSvg(A, O, S)}<div class="tg-lg" style="justify-content:center"><span><i class="tg-sw" style="background:var(--ink)"></i>내가 본 나</span>${O?'<span><i class="tg-sw" style="background:var(--peer)"></i>지인이 본 나</span>':''}${S?'<span><i class="tg-sw tg-sw-dash"></i>사주</span>':''}</div>${line?`<p class="tg-line">${line}</p>`:''}`;
 }
 function traitGapHtml(A, O, S){
   const a=pgPos(A), o=pgPos(O), s=pgPos(S);
