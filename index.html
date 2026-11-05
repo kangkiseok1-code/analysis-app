@@ -474,6 +474,7 @@ html{-webkit-tap-highlight-color:transparent}
 <script src="/jalim-engine/v2.0.0/judge-transport.js" integrity="sha384-/4TPGXa6tu9v68Dt4s/2L8yfCV+cJA5czYGBWJr0Y/BU3USEycTUdcqvPYFbZJsA"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="checkin-cards.js"></script>
+<script src="birth-check.js"></script>
 <script>
 /* ======================================================================
    설정 — 새 Supabase 프로젝트를 만든 뒤 아래 두 값을 교체하세요.
@@ -1763,11 +1764,9 @@ function coreCardHtml(){
   if(!me||!hasBirth(profile)) return '';
   if(!coreRow){
     if(lsGet('mating_core_later')==='1') return '';
-    return `<div class="card"><h2><span class="seal">◆</span> 이 정보를 자림에 저장할까요?</h2>
-      <p class="sub" style="margin:0 0 6px">자림에 저장하면 오늘의 기운·재물운·인생 다시 걷기에서 생년월일을 다시 입력하지 않아요.</p>
-      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;min-height:44px;margin:8px 0"><input type="checkbox" id="coreOk" style="width:22px;height:22px;flex:none;margin:1px 0 0" onchange="document.getElementById('coreSaveBtn').disabled=!this.checked"> 다른 자림 앱에서도 내 출생정보를 쓰는 데 동의해요</label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="coreSaveBtn" disabled onclick="coreSave()">자림에 저장</button><button class="btn ghost" onclick="coreDismiss()">나중에</button></div>
-      <p class="sub" style="font-size:.78rem;margin:8px 0 0">동의는 언제든 자림 허브의 내 계정에서 거둘 수 있어요.</p></div>`;
+    return `<div class="card"><h2><span class="seal">◆</span> 다른 앱에서 다시 입력하지 않게 저장할까요?</h2>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.88rem;min-height:44px;margin:8px 0"><input type="checkbox" id="coreOk" style="width:22px;height:22px;flex:none;margin:1px 0 0" onchange="var b=document.getElementById('coreSaveBtn');b.disabled=!this.checked;b.textContent=this.checked?'자림에 저장':'동의 후 저장'"> 오늘의 기운·재물운·인생 다시 걷기 등 다른 자림 앱에서 내 출생정보를 쓰는 데 동의해요 (허브 내 계정에서 언제든 철회)</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="coreSaveBtn" disabled onclick="coreSave()">동의 후 저장</button><button class="btn ghost" onclick="coreDismiss()">나중에</button></div></div>`;
   }
   const diff=coreDiff(profile,coreRow);
   if(diff.length&&lsGet('mating_core_keep')!==coreSig(coreRow)){
@@ -1966,7 +1965,8 @@ function renderOnboardBirth(){
 async function saveOnboardBirth(){
   const val=id=>document.getElementById(id).value.trim();
   const num=id=>{ const n=parseInt(val(id),10); return isNaN(n)?null:n; };
-  if(!num('f-y')||!num('f-mo')||!num('f-d')){ statusEl('생년월일(연·월·일)을 입력해주세요','err'); return; }
+  const bad=BirthCheck.msg(num('f-y'),num('f-mo'),num('f-d'),document.getElementById('f-notime').checked?null:num('f-h'),document.getElementById('f-notime').checked?null:num('f-min'));
+  if(bad){ statusEl(bad,'err'); return; }
   const cal=val('f-cal'); const noTime=document.getElementById('f-notime').checked;
   const bcity=birthCityValue(); if(bcity===undefined){ statusEl('출생지는 목록에서 골라 주세요 (모르면 비워 두세요)','err'); return; }
   const fields={ nickname:val('f-nick')||null, gender:val('f-gender')||null, birth_city:bcity,
@@ -2120,9 +2120,9 @@ function renderProfile(){
         <div><label style="font-weight:400">시/도</label>
           <select id="f-sido">
             <option value="">선택</option>
-            ${SIDO_LIST.map(s=>`<option value="${s}" ${p.region_sido===s?'selected':''}>${s}</option>`).join('')}
+            ${SIDO_LIST.map(s=>`<option value="${s}" ${(p.region_sido||(SIDO_LIST.includes((p.region||'').trim())?p.region.trim():''))===s?'selected':''}>${s}</option>`).join('')}
           </select></div>
-        <div><label style="font-weight:400">상세 <span class="opt">(선택)</span></label><input type="text" id="f-region" value="${esc(p.region)}" placeholder="예: 강남구"></div>
+        <div><label style="font-weight:400">상세 <span class="opt">(선택)</span></label><input type="text" id="f-region" value="${esc(!p.region_sido&&SIDO_LIST.includes((p.region||'').trim())?'':p.region)}" placeholder="예: 강남구"></div>
       </div>
       <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn" id="save">저장</button>
@@ -2198,6 +2198,8 @@ async function saveProfile(){
   const num = id => { const n=parseInt(val(id),10); return isNaN(n)?null:n; };
   const cal = val('f-cal');
   const noTime = document.getElementById('f-notime').checked;
+  const bad = BirthCheck.msg(num('f-y'),num('f-mo'),num('f-d'),noTime?null:num('f-h'),noTime?null:num('f-min'));
+  if(bad){ statusEl(bad,'err'); return; }
   const bcity = birthCityValue(); if(bcity===undefined){ statusEl('출생지는 목록에서 골라 주세요 (모르면 비워 두세요)','err'); return; }
   const fields = {
     nickname: val('f-nick') || null,
