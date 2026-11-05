@@ -69,7 +69,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .tg-tr{position:relative;height:18px}.tg-tr:before{content:'';position:absolute;left:0;right:0;top:8px;height:2px;border-radius:1px;background:var(--line)}
 .tg-tr:after{content:'';position:absolute;left:50%;top:3px;width:1px;height:12px;background:var(--line-strong)}   /* 가운데 = 각자의 평균 */
 .tg-dot{position:absolute;top:2px;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);box-sizing:border-box}
-.tg-me{background:var(--ink);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.tg-me{background:var(--accent-ink);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
 .tg-peer{background:var(--card);border:2.5px solid var(--peer);width:12px;height:12px;top:3px}
 .tg-saju{background:transparent;border:2px dashed var(--purple);width:12px;height:12px;top:3px}
 .tg-tag{font-size:.7rem;font-weight:700;padding:3px 6px;border-radius:10px;text-align:center;white-space:nowrap}
@@ -709,7 +709,7 @@ function reflectHtml(k, d){
 }
 function gapDetailHtml(A, O, b5cmp, S){
   const pair=(a,o)=>`<div class="gd-bars">
-      <div><span class="gd-who">자기</span><span class="gd-track"><i style="width:${a}%;background:var(--ink)"></i></span><b>${a}</b></div>
+      <div><span class="gd-who">자기</span><span class="gd-track"><i style="width:${a}%;background:var(--accent-ink)"></i></span><b>${a}</b></div>
       <div><span class="gd-who">지인</span><span class="gd-track"><i style="width:${o}%;background:var(--peer)"></i></span><b>${o}</b></div></div>`;
   const oh=OH_KEYS.map(k=>({k,a:A[k]||0,o:O[k]||0,d:(A[k]||0)-(O[k]||0)}));
   // 성향 칩 — 오각형 라벨과 같은 역할(누르면 그 성향 설명). 차이 크기를 함께 표시
@@ -2974,7 +2974,7 @@ function traitRadarSvg(A, O, S){
   const poly=(v,st)=>`<polygon points="${OH_KEYS.map((k,i)=>P(i,R*Math.max(v[k],.04)).join(',')).join(' ')}" ${st}/>`;
   if(s) g+=poly(s,'fill="none" stroke="#7b5cc4" stroke-width="1.6" stroke-dasharray="4 3"');
   if(o) g+=poly(o,'fill="var(--peer)" fill-opacity=".14" stroke="var(--peer)" stroke-width="1.8"');
-  g+=poly(a,'fill="var(--ink)" fill-opacity=".1" stroke="var(--ink)" stroke-width="2"');
+  g+=poly(a,'fill="var(--accent-ink)" fill-opacity=".12" stroke="var(--accent-ink)" stroke-width="2"');
   return `<svg class="tg-radar" viewBox="0 0 260 236" role="img" aria-label="다섯 성향 오각형">${g}</svg>`;
 }
 // 한 문장 — 지인이 있으면 나와 지인의 가장 큰 차이, 없으면 나와 사주의 가장 큰 차이(각자 평균 기준 위치로 비교)
@@ -2992,7 +2992,7 @@ function traitLine(A, O, S){
 }
 function traitSumHtml(A, O, S){
   const line=traitLine(A, O, S);
-  return `${traitRadarSvg(A, O, S)}<div class="tg-lg" style="justify-content:center"><span><i class="tg-sw" style="background:var(--ink)"></i>내가 본 나</span>${O?'<span><i class="tg-sw" style="background:var(--peer)"></i>지인이 본 나</span>':''}${S?'<span><i class="tg-sw tg-sw-dash"></i>사주</span>':''}</div>${line?`<p class="tg-line">${line}</p>`:''}`;
+  return `${traitRadarSvg(A, O, S)}<div class="tg-lg" style="justify-content:center"><span><i class="tg-sw" style="background:var(--accent-ink)"></i>내가 본 나</span>${O?'<span><i class="tg-sw" style="background:var(--peer)"></i>지인이 본 나</span>':''}${S?'<span><i class="tg-sw tg-sw-dash"></i>사주</span>':''}</div>${line?`<p class="tg-line">${line}</p>`:''}`;
 }
 function traitGapHtml(A, O, S){
   const a=pgPos(A), o=pgPos(O), s=pgPos(S);
