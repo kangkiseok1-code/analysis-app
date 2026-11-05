@@ -113,7 +113,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .notes-toggle-bar button{font-size:.78rem;padding:5px 12px}
 /* 내 분석 서브탭 (사주 / 성향 / 퍼셉션 갭) */
 .rtab{flex:1 0 auto;white-space:nowrap;padding:11px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-weight:700;font-size:.88rem;color:var(--muted);cursor:pointer}
-.rtab.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rtab.active{background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .rpane[hidden]{display:none}
 /* 오행 원국·합충 모드 토글 */
 .ohaeng-modes{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
@@ -126,7 +126,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .ipc-empty{text-align:center;padding:8px 4px}
 .ipc-empty p{margin:0 0 8px}
 .ipc-pick{margin-bottom:8px}
-.ipc-mode.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ipc-mode.active{background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .ipc-gap{font-size:.85rem;margin:10px 0 4px;padding:8px 12px;border-radius:10px;background:var(--peer-tint);color:var(--peer-ink)}
 .ipc-note{font-size:.75rem;color:var(--muted);margin:6px 0 0}
 .ipc-help{font-size:.78rem;color:var(--muted);margin-top:8px}
@@ -136,7 +136,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .steps{display:grid;gap:6px;margin:14px 0 18px}
 .steps .st{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--jn-nav-off);white-space:nowrap}
 .steps .st::before{content:'';height:4px;border-radius:2px;background:var(--line)}
-.steps .st.done::before{background:var(--ink)}
+.steps .st.done::before{background:var(--accent)}
 .steps .st.cur{color:var(--ink);font-weight:600}
 .steps .st.cur::before{background:var(--gold)}
 [data-pstep][hidden]{display:none}
@@ -153,7 +153,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .qp-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
 .qp-count{font-size:13px;font-weight:600;color:var(--gold)}
 .qp-prog{height:4px;border-radius:2px;background:var(--line);margin:10px 0 4px;overflow:hidden}
-.qp-prog i{display:block;height:100%;background:var(--ink);transition:width var(--dur-base) var(--ease-out)}
+.qp-prog i{display:block;height:100%;background:var(--accent);transition:width var(--dur-base) var(--ease-out)}
 @keyframes jm-slide-in{from{opacity:0;transform:translateX(14px)}}
 .qpager .q.cur{animation:jm-slide-in var(--dur-base) var(--ease-out) both}   /* 다음 문항이 옆에서 밀려 들어옴 */
 /* 결과 공개(처음 한 번): 원국 기둥이 시주→연주 순서로 차례 등장, 막대는 0에서 차오름 */
@@ -164,7 +164,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .qp-miss{margin-top:10px;padding:8px 10px;border:1px solid var(--danger);border-radius:8px;font-size:13px;color:var(--danger);line-height:1.9}
 .qp-miss button{background:none;border:1px solid var(--danger);border-radius:6px;color:var(--danger);font:inherit;font-size:12px;padding:0 7px;margin:0 0 0 4px;min-height:0;width:auto;cursor:pointer;white-space:nowrap}
 /* 카카오 로그인 버튼 — 카카오 디자인 가이드 색(#FEE500 바탕·검정 글자) */
-.oh-mode.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.oh-mode.active{background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .oh-pane[hidden]{display:none}
 /* 십성 심리 번역 */
 .ss-list{display:flex;flex-direction:column;gap:11px;margin-top:4px}
@@ -192,7 +192,7 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .likert{display:flex;gap:6px}
 .likert label{flex:1;margin:0;text-align:center;border:1px solid var(--line);border-radius:8px;padding:9px 2px;cursor:pointer;font-weight:400;font-size:.78rem;color:var(--muted);transition:.12s}
 .likert input{position:absolute;opacity:0;width:0;height:0}
-.likert label:has(input:checked){background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.likert label:has(input:checked){background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .likert label span{display:block}
 /* 막대 (성향·십신) */
 .bar{display:flex;align-items:center;gap:10px;margin:8px 0}
@@ -237,7 +237,7 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{margin:0;font-weight:400;border:1px solid var(--line);border-radius:20px;padding:8px 14px;cursor:pointer;font-size:.85rem;color:var(--sub);background:var(--card);transition:.12s}
 .chip input{position:absolute;opacity:0;width:0;height:0}
-.chip:has(input:checked){background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip:has(input:checked){background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .pref-sec-title{font-weight:700;font-size:.95rem;margin:22px 0 6px;color:var(--gold);border-top:1px solid var(--line);padding-top:16px}
 .qpager .pref-sec-title{margin:0 0 4px;border-top:none;padding-top:0;font-size:.85rem}
 .qpager .q .qtext .opt{font-family:inherit;font-size:.8rem;font-weight:400;color:var(--muted)}
@@ -322,7 +322,7 @@ code{background:var(--surface-2);padding:1px 6px;border-radius:5px;font-size:.85
   background:var(--card);font:inherit;font-size:.76rem;cursor:pointer;white-space:nowrap}
 .gd-chip span{font-size:.72rem;color:var(--muted);font-weight:600}
 .gd-chip.lv-l span{color:var(--danger)} .gd-chip.lv-m span{color:var(--gold)}
-.gd-chip.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--card)}
+.gd-chip.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--card)}
 .gd-b5{margin-top:10px}
 .gd-b5>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-size:.86rem;font-weight:600;color:var(--gold)}
   .city-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
@@ -383,7 +383,7 @@ html{-webkit-tap-highlight-color:transparent}
 .og-sg{fill:#fff;font-size:10.5px;font-weight:600;text-anchor:middle;opacity:.9}
 .og-day{stroke:var(--gold);stroke-width:3.5}
 .og-daylabel{fill:var(--gold);font-size:12px;font-weight:700;text-anchor:middle}
-.oh-mode.active, .rel-mode.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.oh-mode.active, .rel-mode.active{background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .deep-modes{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
 .rel-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:18px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
 .rel-title{font-size:12px;color:var(--sub);font-weight:600}
@@ -461,7 +461,7 @@ html{-webkit-tap-highlight-color:transparent}
 .rel-card.off-hap [data-k="hap"],.rel-card.off-chung [data-k="chung"],.rel-card.off-hpe [data-k="hpe"],.rel-card[data-mode="luck"].off-nat [data-nat]{display:none}
 .rel-num{min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:99px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:700;line-height:18px;text-align:center}
 .pg-badge,.ohaeng-card .ohaeng-modes,.johari .ohaeng-modes{width:100%;max-width:360px;margin-left:auto;margin-right:auto;box-sizing:border-box}
-.card.rel-card{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.card.rel-card{background:var(--pick);color:var(--pick-ink);border-color:var(--pick)}
 .card.rel-card h2{border-color:var(--ink-line)}
 .card.rel-card .sub{color:var(--ink-sub)}
 .card.rel-card .sub b{color:#fff}
@@ -2696,7 +2696,7 @@ async function shareTypeCard(){
   catch(_){ prompt('아래 링크를 복사해 보내세요', url); }
 }
 function toastMsg(t){
-  let el=document.getElementById('tc-toast'); if(!el){ el=document.createElement('div'); el.id='tc-toast'; el.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#121212;color:#fff;padding:10px 16px;border-radius:99px;font-size:.88rem;z-index:99;max-width:90vw'; document.body.appendChild(el); }
+  let el=document.getElementById('tc-toast'); if(!el){ el=document.createElement('div'); el.id='tc-toast'; el.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--card);color:var(--ink);box-shadow:var(--shadow);padding:10px 16px;border-radius:99px;font-size:.88rem;z-index:99;max-width:90vw'; document.body.appendChild(el); }
   el.textContent=t; el.hidden=false; clearTimeout(toastMsg._t); toastMsg._t=setTimeout(()=>{ el.hidden=true; },2400);
 }
 function tcWrap(ctx, text, maxW){ const out=[]; let cur=''; for(const ch of text){ if(ctx.measureText(cur+ch).width>maxW && cur){ out.push(cur.trim()); cur=ch; } else cur+=ch; } if(cur.trim()) out.push(cur.trim()); return out; }
