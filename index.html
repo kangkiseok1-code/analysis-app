@@ -203,8 +203,8 @@ h2 .seal{display:none}   /* D: 제목 앞 ◆ 장식 없이 */
 .el-목{color:var(--m)}.el-화{color:var(--h)}.el-토{color:var(--t)}.el-금{color:var(--g)}.el-수{color:var(--s)}
 /* 간지 카드 (원국) */
 .gz-strip{display:flex;gap:9px;padding:4px 2px 4px}
-.gz-strip.natal{flex-wrap:nowrap;overflow-x:auto}   /* 세운·대운 포함 6칸 — 좁은 화면은 줄바꿈 대신 옆으로 밀기 */
-.gz-strip.natal .gz-card{flex:1 0 64px;min-width:64px}
+.gz-strip.natal{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 9px}   /* 원국 4기둥 한 줄 + 대운·세운 아랫줄 — 옆 스크롤 없이 */
+.gz-strip.natal .gz-card{order:1;min-width:0}.gz-strip.natal .gz-card.luck{order:2;grid-column:span 2}.gz-strip.natal .gz-card.luck .gz-box{max-width:76px;margin-left:auto;margin-right:auto}
 .gz-card{text-align:center;min-width:0}
 /* 만세력 원국 카드 — 오행 색은 그대로, 글씨는 리디자인 글꼴(산세리프·굵게)로 */
 .gz-card .pos{font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.02em}
