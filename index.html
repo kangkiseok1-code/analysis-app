@@ -475,6 +475,7 @@ html{-webkit-tap-highlight-color:transparent}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="checkin-cards.js"></script>
 <script src="birth-check.js"></script>
+<script src="core-sync.js"></script>
 <script>
 /* ======================================================================
    설정 — 새 Supabase 프로젝트를 만든 뒤 아래 두 값을 교체하세요.
@@ -1692,6 +1693,7 @@ async function loadProfile(){
   if(error){ console.error(error); profile=null; return; }
   profile = data;
   coreRow = await loadCoreRow();
+  if(coreRow&&hasBirth(profile)&&coreDiff(profile,coreRow).length) await coreQuietSync();   // 동의한 공용 정보가 기준 — 다르면 조용히 맞춘다
   syncMatchProfile();   // 기다리지 않음 — 실패해도 화면 진행
 }
 /* ---- 자림에 저장된 내 정보(공용 출생정보, core_profiles) ----
@@ -2216,6 +2218,7 @@ async function saveProfile(){
   statusEl('저장 중…');
   const { error } = await sb.from('profiles').update(fields).eq('id', me.id);
   if(error){ statusEl('저장 실패: '+error.message,'err'); return; }
+  await corePush(fields);   // 공용 정보도 같은 값으로
   await loadProfile();
   statusEl('저장됐어요 ✓','ok');
   if(coreRow&&hasBirth(profile)&&coreDiff(profile,coreRow).length&&lsGet('mating_core_keep')!==coreSig(coreRow)) goTab('me');   // 공용 정보와 다르면 비교 카드가 있는 나 탭으로
